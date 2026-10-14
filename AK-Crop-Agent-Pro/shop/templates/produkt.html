@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>{{ product[3] }}</title>
+
+<!--
+  Produkt-Detailseite - Finales Styling & Cleanup
+  Ziel: hochwertig, ruhig, sammler-shop Look
+  Änderungen:
+   - Zurück-Link oberhalb des Titels
+   - Empfehlungen entfernt
+   - Banner unten nutzt gesamte Container-Breite
+   - Grüne Status-Farben ersetzt durch warme Braun-/Goldtöne
+   - Warenkorb-Erfolgsbox im Vintage-Stil
+   - Versand-Infos/Status optisch ausgerichtet
+   - Bild größer, Grid 1.2fr / 0.8fr
+   - Code bereinigt, Kommentare ergänzt
+-->
+
+<style>
+/* -------------------------
+   Farbpalette (AK-Shop warm/gold-braun)
+   ------------------------- */
+:root{
+  --bg: #f4efe6;
+  --page-bg: #e9e4da;
+  --text: #2f1d12;
+  --accent: #7a4d24;          /* Buttons, Preisfarbe */
+  --muted: #6d4727;
+  --card-bg: #f4eee2;
+  --border: #b89362;
+  --highlight-bg: #fffdf8;
+  --damage-bg: #fff0e6;
+  --damage-left: #8a4d1f;
+
+  /* Neue "success" Töne - warm/gold statt grün */
+  --success: #8a5a2b;
+  --success-border: #c8a97f;
+  --success-bg: #f8f1e5;
+}
+
+/* Reset & Grundtypografie */
+* { box-sizing: border-box; }
+html,body { height:100%; margin:0; }
+body{
+  font-family: Georgia, "Times New Roman", serif;
+  background: var(--page-bg);
+  color: var(--text);
+  -webkit-font-smoothing:antialiased;
+}
+
+/* Seiten-Wrapper (begrenzte Breite für hochwertigen Look) */
+.wrapper{
+  max-width:1200px;
+  margin:28px auto;
+  padding:22px;
+  background: var(--bg);
+  border-radius:8px;
+}
+
+/* -------------------------
+   ZURÜCK-LINK (oben, dezent aber sichtbar)
+   ------------------------- */
+.back-link{
+  display:inline-block;
+  color:var(--accent);
+  text-decoration:none;
+  font-weight:700;
+  margin-bottom:15px; /* gewünschter Abstand */
+  transition: color .15s ease;
+  font-size:0.95rem;
+}
+.back-link:hover{
+  text-decoration:underline;
+  color:darken(var(--accent), 5%); /* fallback ignored by browsers without preprocess */
+}
+
+/* Produkt-Titel */
+.product-title{
+  font-size:1.6rem;
+  margin:6px 0 12px 0;
+  line-height:1.05;
+  font-weight:700;
+}
+
+/* -------------------------
+   Haupt-Layout: Bild links, Details rechts
+   leicht modifiziert: mehr Raum fürs Bild (1.2 / 0.8)
+   ------------------------- */
+.product-grid{
+  display:grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap:22px;
+  align-items:start;
+}
+@media (max-width:880px){
+  .product-grid{ grid-template-columns:1fr; }
+}
+
+/* Bildpanel (links) */
+.image-panel{
+  background: var(--card-bg);
+  border:2px solid var(--border);
+  border-radius:8px;
+  padding:12px;
+}
+
+/* Bild (größer, max-height erhöht), klickbar zum Vergrößern */
+.viewer{
+  width:100%;
+  display:block;
+  border-radius:6px;
+  cursor:zoom-in;
+  max-height:80vh;
+  object-fit:contain;
+}
+
+/* Tabs Vorder-/Rückseite - aktive Darstellung deutlich */
+.tabs{
+  display:flex;
+  gap:8px;
+  margin-top:10px;
+}
+.tabs button{
+  padding:8px 12px;
+  border:none;
+  border-radius:6px;
+  background:#d8c3a0;
+  color:var(--text);
+  cursor:pointer;
+  font-weight:600;
+  height:40px;           /* einheitliche Buttonhöhe */
+  line-height:1;
+}
+.tabs button:hover{ background:#c8a97f; }
+.tabs button.active{
+  background:#8a5a2b;
+  color:#fff;
+}
+
+/* -------------------------
+   Info-Panel (rechts)
+   ------------------------- */
+.info-panel{
+  background: var(--card-bg);
+  border:2px solid var(--border);
+  border-radius:8px;
+  padding:16px;
+}
+
+/* Preis: etwas größer / prägnant */
+.price{
+  font-size:2.5rem; /* erhöht wie gewünscht */
+  color:var(--accent);
+  font-weight:800;
+  margin:0 0 8px 0;
+}
+
+/* Verfügbarkeit & Status - jetzt im warmen Braunton */
+.availability{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  color:var(--success);
+  font-weight:700;
+  margin-bottom:10px;
+}
+
+/* Shipping hints - jede Zeile professionell ausgerichtet */
+.shipping-list{
+  margin:8px 0 0 0;
+  padding:0;
+  list-style:none;
+  color:var(--muted);
+  font-size:0.95rem;
+}
+.shipping-list li{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin:6px 0;
+}
+/* Icon der Statuszeilen (gold/braun) */
+.status-icon{
+  display:inline-flex;
+  width:20px;
+  height:20px;
+  align-items:center;
+  justify-content:center;
+  color:var(--success);
+  font-size:14px;
+}
+
+/* Info-Grid (Kurzinfos) */
+.info-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-top:12px;
+}
+@media (max-width:580px){ .info-grid{ grid-template-columns:1fr; } }
+.info-box{
+  background: var(--highlight-bg);
+  border:1px solid #e1d3b7;
+  border-radius:6px;
+  padding:10px;
+  font-size:0.95rem;
+}
+.label{ display:block; font-weight:700; color:var(--muted); margin-bottom:6px; }
+
+/* CTA: einheitliche Button-Größen */
+.cta-area{
+  margin-top:14px;
+  display:flex;
+  gap:10px;
+  align-items:center;
+  flex-wrap:wrap;
+}
+.btn{
+  padding:10px 14px;
+  border-radius:6px;
+  border:none;
+  cursor:pointer;
+  font-weight:700;
+  height:40px;         /* einheitliche Höhe */
+  line-height:1;
+}
+.btn-primary{ background:var(--accent); color:#fff; }
+.btn-ghost{ background:transparent; border:1px solid var(--border); color:var(--text); }
+
+/* -------------------------
+   Warenkorb-Erfolgsbox (Vintage / dezent)
+   - heller Cremehintergrund, goldene Umrandung, dunkles Braun
+   ------------------------- */
+.cart-feedback{
+  margin-left:8px;
+  display:flex;
+  gap:12px;
+  align-items:center;
+  color:var(--text);
+  font-weight:700;
+
+  background: var(--success-bg);
+  border: 1px solid var(--success-border);
+  padding:10px 12px;
+  border-radius:6px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+}
+
+/* Mängel-Box - deutliche Hervorhebung, aber farblich passend */
+.damage-box{
+  margin-top:16px;
+  background: var(--damage-bg);
+  border-left:6px solid var(--damage-left);
+  padding:12px;
+  border-radius:6px;
+  box-shadow:0 2px 6px rgba(0,0,0,0.04);
+}
+.damage-box h3{ margin:0 0 8px 0; }
+
+/* Extended description / meta cards */
+.section{
+  margin-top:18px;
+  background:#fffdf8;
+  border:1px solid #d5c7b0;
+  border-radius:8px;
+  padding:12px;
+}
+.meta-cards{ display:flex; gap:12px; margin-top:12px; flex-wrap:wrap; }
+.meta-card{
+  flex:1;
+  min-width:180px;
+  background:#f7f2e7;
+  border:1px solid #c9b28b;
+  border-radius:6px;
+  padding:10px;
+}
+
+/* Modal für Bildvergrößerung */
+.modal{
+  display:none;
+  position:fixed;
+  inset:0;
+  background: rgba(0,0,0,0.6);
+  align-items:center;
+  justify-content:center;
+  z-index:1000;
+  padding:20px;
+}
+.modal.show{ display:flex; }
+.modal-content{
+  max-width:1100px;
+  width:100%;
+  background:#fff;
+  border-radius:8px;
+  padding:12px;
+  box-shadow:0 8px 30px rgba(0,0,0,0.5);
+}
+.modal-content img{ width:100%; height:auto; display:block; border-radius:6px; }
+
+/* -------------------------
+   BOTTOM BANNER (Aki & Kari) - nutzt gesamte Breite des Container-Wrappers
+   ------------------------- */
+.banner-row{
+  margin-top:18px;
+  display:block;
+  width:100%;
+}
+.banner-image{
+  width:100%;
+  max-width:none;       /* wichtig: keine max-width einschränkung */
+  display:block;
+  object-fit:cover;     /* proportional skalieren */
+  border-radius:6px;
+}
+
+/* Footer note */
+.page-footer{ margin-top:18px; font-size:0.9rem; color:var(--muted); text-align:center; }
+
+/* Utilities */
+.hidden{ display:none !important; }
+</style>
+</head>
+<body>
+
+<div class="wrapper">
+
+  <!-- =========================
+       Zurück-Link (oben)
+       ========================= -->
+  <a href="/katalog" class="back-link" aria-label="Zurück zum Katalog">← Zurück zum Katalog</a>
+
+  <!-- Produkt-Titel -->
+  <header role="banner" aria-label="Produkt Titel">
+    <h1 class="product-title">{{ product[3] }}</h1>
+  </header>
+
+  <!-- =========================
+       Hauptbereich (Bild links / Details rechts)
+       ========================= -->
+  <main class="product-grid" role="main" aria-label="Produkt Detailbereich">
+
+    <!-- Bildpanel -->
+    <section class="image-panel" aria-labelledby="viewer-label">
+      <div id="viewer-label" class="hidden">Postkarten Ansicht</div>
+
+      <!-- Tabs -->
+      <div class="tabs" role="tablist" aria-label="Ansicht umschalten">
+        <button id="tab-front" type="button" class="active" onclick="showFront()">Vorderseite</button>
+        <button id="tab-back" type="button" onclick="showBack()">Rückseite</button>
+      </div>
+
+      <!-- Hauptbild (klickbar) -->
+      <img id="postcard-image" class="viewer"
+           src="/bild/{{ product[1] }}"
+           alt="Ansichtskarte {{ product[3] }}"
+           onclick="openModal()"
+           data-side="front" />
+
+      <div style="margin-top:8px; font-size:0.9rem; color:var(--muted);">Klicken zum Vergrößern</div>
+    </section>
+
+    <!-- Info-Panel -->
+    <aside class="info-panel" aria-labelledby="product-info-title">
+      <h2 id="product-info-title" class="hidden">Produktinformationen</h2>
+
+      <!-- Preis -->
+      <div class="price" aria-live="polite">{{ product[9] }} €</div>
+
+      <!-- Verfügbarkeit (warm/gold statt grün) -->
+      <div class="availability" role="status" aria-atomic="true">
+        <span class="status-icon" aria-hidden="true">✅</span>
+        <span id="availability-text">
+          {% if product[10] %}
+            {{ product[10] }}
+          {% else %}
+            Verfügbar
+          {% endif %}
+        </span>
+      </div>
+
+      <!-- Versand-Infos: Icon & Text vertikal ausgerichtet -->
+      <ul class="shipping-list" aria-hidden="false">
+        <li><span class="status-icon" aria-hidden="true">📦</span><span>Versand innerhalb von 2 Werktagen</span></li>
+        <li><span class="status-icon" aria-hidden="true">🇩🇪</span><span>Versand aus Deutschland</span></li>
+      </ul>
+
+      <!-- CTA: In den Warenkorb -->
+      <div class="cta-area" aria-live="polite">
+        <button id="add-to-cart-btn" class="btn btn-primary" type="button" onclick="addToCart('{{ product[1] }}','{{ product[3] }}')">🛒 In den Warenkorb</button>
+
+        <!-- Warenkorb-Erfolgsbox: dezent vintage-stil -->
+        <div id="cart-feedback" class="cart-feedback hidden" role="status" aria-live="polite">
+          <span id="cart-check">✅ Artikel im Warenkorb</span>
+          <a href="/warenkorb" style="text-decoration:underline; color:var(--text); margin-left:6px;">Zum Warenkorb</a>
+        </div>
+      </div>
+
+      <!-- Kurzinfos (Artikelnummer, Zustand, Gelaufen, Verlag, Stempel) -->
+      <div class="info-grid" role="list">
+        <div class="info-box" role="listitem">
+          <span class="label">Artikelnummer</span>
+          {{ product[1] }}
+        </div>
+
+        <div class="info-box" role="listitem">
+          <span class="label">Zustand</span>
+          {{ postcard[3] }}
+        </div>
+
+        <div class="info-box" role="listitem">
+          <span class="label">Gelaufen</span>
+          {{ postcard[5] }}
+        </div>
+
+        <div class="info-box" role="listitem">
+          <span class="label">Verlag</span>
+          {{ postcard[1] }}
+        </div>
+
+        <div class="info-box" role="listitem">
+          <span class="label">Stempel</span>
+          {{ postcard[7] }}
+        </div>
+
+        <div class="info-box" role="listitem">
+          <span class="label">Hinweis</span>
+          Einzelstück / limitierte Auflage
+        </div>
+      </div>
+
+      <!-- Mängel / Zustandshinweis -->
+      <div class="damage-box" role="region" aria-labelledby="damage-title">
+        <h3 id="damage-title">Bekannte Mängel / Zustandshinweis</h3>
+        {% if postcard[12] and postcard[12]|trim %}
+          <p>{{ postcard[12] }}</p>
+        {% else %}
+          <p>Keine besonderen Mängel vermerkt.</p>
+        {% endif %}
+      </div>
+
+      <!-- Ausführliche Zustandsbeschreibung -->
+      <div class="section" aria-labelledby="zustand-title">
+        <h3 id="zustand-title">Zustandsdetails</h3>
+        <p>{{ postcard[4] }}</p>
+      </div>
+
+    </aside>
+  </main>
+
+  <!-- BOTTOM: Aki & Kari Abschlussbanner (volle Breite des Wrappers) -->
+  <section class="banner-row" aria-hidden="false">
+    <img src="/static/aki_kari_exquisite_auswahl.jpg" alt="Aki & Kari Auswahl" class="banner-image" />
+  </section>
+
+  <footer class="page-footer">
+    Hinweis: Darstellung kann je nach Monitor variieren. Alle Angaben nach bestem Wissen.
+  </footer>
+
+</div> <!-- .wrapper -->
+
+<!-- Modal für Bildvergrößerung -->
+<div id="image-modal" class="modal" role="dialog" aria-modal="true" aria-hidden="true">
+  <div class="modal-content" role="document">
+    <button id="modal-close" style="float:right;border:none;background:transparent;font-size:1.2rem;cursor:pointer;">✕</button>
+    <img id="modal-image" src="" alt="Vergrößerte Ansicht">
+  </div>
+</div>
+
+<!--
+  JavaScript (klein, gut kommentiert):
+  - showFront/showBack: Bildumschaltung + aktive Tab-Klasse
+  - Modal: open/close
+  - addToCart: localStorage, UI-Feedback (cart-feedback)
+-->
+<script>
+(function(){
+  'use strict';
+
+  // Safe string helper (server-side Werte sollten bereits sicher sein)
+  function escapeHtml(str){
+    return String(str || '')
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+      .replace(/"/g,'&quot;').replace(/'/g,'&#039;');
+  }
+
+  var tabFront = document.getElementById('tab-front');
+  var tabBack = document.getElementById('tab-back');
+  var imgEl = document.getElementById('postcard-image');
+  var modal = document.getElementById('image-modal');
+  var modalImage = document.getElementById('modal-image');
+  var modalClose = document.getElementById('modal-close');
+  var addBtn = document.getElementById('add-to-cart-btn');
+  var feedback = document.getElementById('cart-feedback');
+
+  // Show front view
+  window.showFront = function(){
+    if(!imgEl) return;
+    imgEl.src = '/bild/{{ product[1] }}';
+    imgEl.setAttribute('data-side','front');
+    if(tabFront) tabFront.classList.add('active');
+    if(tabBack) tabBack.classList.remove('active');
+  };
+
+  // Show back view
+  window.showBack = function(){
+    if(!imgEl) return;
+    imgEl.src = '/bild_rueckseite/{{ product[1] }}';
+    imgEl.setAttribute('data-side','back');
+    if(tabBack) tabBack.classList.add('active');
+    if(tabFront) tabFront.classList.remove('active');
+  };
+
+  // Modal open/close for image zoom
+  window.openModal = function(){
+    if(!imgEl || !modal) return;
+    modalImage.src = imgEl.src;
+    modal.classList.add('show');
+    modal.setAttribute('aria-hidden','false');
+  };
+  window.closeModal = function(){
+    if(!modal) return;
+    modal.classList.remove('show');
+    modal.setAttribute('aria-hidden','true');
+    modalImage.src = '';
+  };
+
+  // Close modal on backdrop click or close button
+  modal.addEventListener('click', function(e){
+    if(e.target === modal || e.target === modalClose) closeModal();
+  });
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape') closeModal();
+  });
+
+  // Simple cart logic (localStorage). No placeholders shown to user.
+  window.addToCart = function(id, title){
+    try{
+      var cart = JSON.parse(localStorage.getItem('ak_cart') || '[]');
+    }catch(err){
+      var cart = [];
+    }
+
+    // Prevent duplicate entries
+    if(cart.some(function(item){ return String(item.id) === String(id); })){
+      showInlineFeedback(true);
+      updateHeaderCartCount();
+      return;
+    }
+
+    cart.push({ id: id, title: title });
+    localStorage.setItem('ak_cart', JSON.stringify(cart));
+    updateHeaderCartCount();
+    showInlineFeedback(true);
+
+    if(addBtn) addBtn.setAttribute('aria-pressed','true');
+  };
+
+  function showInlineFeedback(show){
+    if(!feedback) return;
+    if(show) feedback.classList.remove('hidden');
+    else feedback.classList.add('hidden');
+  }
+
+  function updateHeaderCartCount(){
+    var counter = document.getElementById('cartCount');
+    if(!counter) return;
+    try{
+      var cart = JSON.parse(localStorage.getItem('ak_cart') || '[]');
+    }catch(e){
+      var cart = [];
+    }
+    counter.textContent = cart.length;
+  }
+
+  // Initialization on DOM ready
+  document.addEventListener('DOMContentLoaded', function(){
+    if(tabFront) tabFront.classList.add('active');
+
+    // Show feedback if product already in cart
+    try{
+      var cart = JSON.parse(localStorage.getItem('ak_cart') || '[]');
+    }catch(e){
+      var cart = [];
+    }
+    var already = cart.some(function(it){ return String(it.id) === String('{{ product[1] }}'); });
+    if(already) showInlineFeedback(true);
+
+    updateHeaderCartCount();
+  });
+
+})();
+</script>
+<script src="/static/js/cart.js"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function(){
+
+    AKCart.initProductPage({
+
+        id: "{{ product[1] }}",
+        title: "{{ product[3] }}",
+        price: "{{ product[9] }}",
+
+        buttonId: "add-to-cart-btn"
+
+    });
+
+});
+<script src="/static/js/cart.js"></script>
+</script>
+</body>
+</html>

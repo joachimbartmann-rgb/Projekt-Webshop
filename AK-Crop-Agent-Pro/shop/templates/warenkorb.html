@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Aki & Kari · Warenkorb</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+
+<style>
+/* ======================================================
+   Farb- und Layout-Variablen
+   ====================================================== */
+:root{
+  --bg: #f4efe6;
+  --card: #fffcf7;
+  --dark: #2c1d11;
+  --brown: #7a5230;
+  --border: #d9ccb8;
+
+  /* Button / CTA */
+  --btn-height: 44px;
+  --btn-radius: 6px;
+  --btn-font-size: 1rem;
+}
+
+/* Basis-Reset */
+*{ box-sizing:border-box; margin:0; padding:0; }
+html,body{ height:100%; }
+body{
+  background:var(--bg);
+  font-family:'Merriweather',serif;
+  color:#332821;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ======================================================
+   Header
+   - Banner nutzt volle Breite (keine Höhenänderung)
+   - Banner skaliert proportional via object-fit:cover
+   ====================================================== */
+header{
+  background:var(--dark);
+  color:white;
+  text-align:center;
+  padding:18px 0 12px; /* oben / unten Platz */
+}
+
+/* Header container (zentriert, begrenzt die Textbreite) */
+.header-inner{
+  max-width:1300px;
+  margin:0 auto;
+  padding:0 20px;
+}
+
+/* Haupttitel */
+.header-title{
+  font-family:'Playfair Display',serif;
+  font-size:2.2rem;
+  line-height:1.05;
+  margin-bottom:6px;
+}
+
+/* Untertitel */
+.header-subtitle{
+  font-size:1rem;
+  color:#f3e8df;
+  margin-bottom:12px;
+}
+
+/* Banner: volle Breite innerhalb Header (proportional, feste Höhe) */
+.header-banner{
+  display:block;
+  width:100%;
+  max-width:none;          /* wichtig: keine Einschränkung */
+  height:140px;            /* konstante Höhe, ändert sich nicht */
+  object-fit:cover;        /* skaliert proportional, füllt Breite */
+  border-radius:6px;
+  margin:12px 0 0 0;
+  background:transparent;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+}
+
+/* Header Warenkorb-Link (oben rechts visuell im Header-inner) */
+.header-actions{
+  margin-top:8px;
+  text-align:right;
+}
+.cart-link{
+  color:white;
+  text-decoration:none;
+  font-size:1.05rem;
+  font-weight:700;
+  padding:6px 12px;
+  border:1px solid rgba(255,255,255,0.12);
+  border-radius:6px;
+}
+.cart-link:hover{ background:rgba(255,255,255,0.06); }
+
+/* ======================================================
+   Haupt-Container
+   ====================================================== */
+.container{
+  max-width:1300px;
+  margin:20px auto;
+  padding:20px;
+}
+
+/* Hero / Einleitung */
+.hero{
+  background:#e9dfcf;
+  border:1px solid var(--border);
+  border-radius:6px;
+  padding:20px;
+  text-align:center;
+  margin-bottom:20px;
+}
+.hero h1{ font-family:'Playfair Display',serif; color:var(--dark); margin-bottom:8px; }
+
+/* ======================================================
+   Warenkorb-Box & Items
+   ====================================================== */
+.cart-box{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:20px;
+}
+
+.cart-controls{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+  margin-bottom:14px;
+}
+
+/* Titel innerhalb der Box */
+.cart-title{
+  font-size:1.15rem;
+  margin:0;
+  color:var(--dark);
+}
+.image-wrap{
+  position:relative;
+}
+
+.viewer{
+  width:100%;
+  display:block;
+  border-radius:6px;
+  cursor:zoom-in;
+  max-height:80vh;
+  object-fit:contain;
+}
+
+.zoom-badge{
+  position:absolute;
+  top:12px;
+  right:12px;
+  background:rgba(255,255,255,0.9);
+  border:1px solid #d9ccb8;
+  border-radius:50%;
+  width:36px;
+  height:36px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:1rem;
+  color:#2c1d11;
+  box-shadow:0 2px 8px rgba(0,0,0,0.12);
+  cursor:pointer;
+  user-select:none;
+}
+
+.zoom-hint{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  margin-top:8px;
+  font-size:0.82rem;
+  color:#6e563d;
+  cursor:pointer;
+  user-select:none;
+}
+/* Einheitliche Button-Größen (CTA und Entfernen) */
+.btn, .cart-btn{
+  height:var(--btn-height);
+  line-height:var(--btn-height);
+  padding:0 14px;
+  border-radius:var(--btn-radius);
+  font-size:var(--btn-font-size);
+  font-weight:700;
+  cursor:pointer;
+  border:none;
+}
+
+/* Primär-Button-Stil (Details / Zum Katalog) */
+.btn{
+  background:var(--brown);
+  color:white;
+  text-decoration:none;
+  display:inline-block;
+}
+.btn:hover{ background:#5c3c21; }
+
+/* Entfernen-Button im Item */
+.cart-btn{
+  background:#7a5230;
+  color:#fff;
+}
+.cart-btn:hover{ background:#5c3c21; }
+
+/* Leerer Warenkorb */
+.empty-cart{
+  text-align:center;
+  padding:36px;
+  color:#66584d;
+}
+
+/* Einzelner Artikel im Warenkorb */
+.cart-item{
+  display:flex;
+  gap:18px;
+  align-items:center;
+  padding:16px;
+  margin-bottom:12px;
+  background:#f8f4ec;
+  border:1px solid #d9ccb8;
+  border-radius:8px;
+}
+
+.cart-image{
+  width:200px;
+  height:140px;
+  object-fit:contain;
+  background:white;
+  border:1px solid #d9ccb8;
+  border-radius:6px;
+  flex-shrink:0;
+}
+
+.cart-data{ flex:1; }
+
+.cart-id{ font-size:0. nine rem; color:#7e705f; margin-bottom:6px; } /* Hinweis: font-size korrigiert unten via override */
+
+.cart-id{ font-size:0.85rem; color:#7e705f; margin-bottom:6px; } /* endgültig */
+
+.cart-title{
+  font-size:1.05rem;
+  font-weight:700;
+  color:var(--dark);
+  margin-bottom:8px;
+}
+
+.cart-actions{
+  display:flex;
+  gap:10px;
+  align-items:center;
+}
+
+/* ======================================================
+   Footer / Hinweis
+   ====================================================== */
+.page-footer{
+  margin-top:18px;
+  font-size:0.95rem;
+  color:#66584d;
+  text-align:center;
+}
+
+/* Kleine Hilfsklasse */
+.hidden{ display:none !important; }
+
+/* Responsive Anpassung */
+@media (max-width:720px){
+  .cart-item{ flex-direction:column; align-items:flex-start; }
+  .cart-image{ width:100%; height:auto; max-height:260px; }
+  .cart-actions{ width:100%; justify-content:flex-start; margin-top:8px; }
+  .header-inner{ padding:0 12px; }
+}
+</style>
+</head>
+<body>
+
+<!-- =========================
+     HEADER
+     - Sauberer Header; Banner nutzt volle Breite (konstante Höhe)
+     - Einzige Stelle für cartCount
+     ========================= -->
+<header>
+  <div class="header-inner">
+    <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:20px;">
+      <div style="flex:1; text-align:left;">
+        <div class="header-title">Historische Ansichtskarten &amp; Sammlerstücke</div>
+        <div class="header-subtitle">Ansichtskarten &amp; Katalog</div>
+      </div>
+
+      <!-- globaler Warenkorb-Link (Header-Zähler) -->
+      <div class="header-actions" style="flex:0 0 auto;">
+        <a href="/warenkorb" class="cart-link" aria-label="Zum Warenkorb">
+          🛒 <span id="cartCount">0</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Banner: volle Breite innerhalb header-inner; konstante Höhe -->
+    <img src="{{ url_for('static', filename='-aki-und-Kari_Banner oben-jpg') }}"
+         alt="Aki und Kari Banner"
+         class="header-banner" />
+  </div>
+</header>
+
+<!-- =========================
+     INHALT
+     ========================= -->
+<div class="container">
+
+  <!-- Hero / Kurzinfo -->
+  <section class="hero" aria-label="Einleitung">
+    <h1>🛒 Aki &amp; Karis Warenkorb</h1>
+    <p>Hier sammeln Aki und Kari alle ausgewählten historischen Ansichtskarten für Ihre Bestellung.</p>
+  </section>
+
+  <!-- Warenkorb-Box -->
+  <section class="cart-box" aria-label="Warenkorb">
+    <div class="cart-controls">
+      <h2 id="cart-title" class="cart-title">Ausgewählte Artikel</h2>
+
+      <!-- Zurück-Button -->
+      <div>
+        <button id="back-button" class="btn" type="button" aria-label="Zurück zum Katalog" style="background:transparent;color:var(--dark);border:1px solid var(--border);padding:8px 12px;">
+          ← Zurück
+        </button>
+      </div>
+    </div>
+
+    <!-- Container, in den die Artikelliste gerendert wird -->
+    <div id="cart-content" aria-live="polite"></div>
+  </section>
+
+  <footer class="page-footer">
+    Hinweis: Darstellung kann je nach Monitor variieren. Alle Angaben nach bestem Wissen.
+  </footer>
+</div>
+
+<!-- =========================
+     JavaScript: Warenkorb-Logik (bereinigt)
+     - Ein einziger localStorage-Key: "ak_cart"
+     - Funktionen: loadCart, removeFromCart, updateHeaderCartCount, escapeHtml
+     - Keine Doppelungen; saubere Kommentare
+     ========================= -->
+<script>
+/* ================
+   Helfer: HTML-escape zum Schutz vor XSS beim Einfügen von Text
+   ================ */
+function escapeHtml(str) {
+  if (str === undefined || str === null) return '';
+  return String(str)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+/* ===============================
+   LocalStorage / Cart-Grundfunktionen
+   - Einziger Key: "ak_cart"
+   =============================== */
+function getCart() {
+  try {
+    return JSON.parse(localStorage.getItem('ak_cart')) || [];
+  } catch (e) {
+    return [];
+  }
+}
+
+function saveCart(cart) {
+  if (!Array.isArray(cart)) cart = [];
+  localStorage.setItem('ak_cart', JSON.stringify(cart));
+  // Event für andere Skripte (falls benötigt)
+  document.dispatchEvent(new CustomEvent('ak_cart_updated', { detail: { count: cart.length } }));
+}
+
+/* ===============================
+   Header-Zähler aktualisieren
+   - Liest Anzahl aus "ak_cart" und schreibt in #cartCount
+   =============================== */
+function updateHeaderCartCount() {
+  const counter = document.getElementById('cartCount');
+  if (!counter) return;
+  const cart = getCart();
+  counter.textContent = cart.length;
+}
+
+/* ===============================
+   Laden und Rendern des Warenkorbs
+   - Rendert alle Items mit Bild, Titel, Artikelnummer, Preis (falls vorhanden) und Entfernen-Button
+   - Bei leerem Warenkorb wird Hinweis + Link angezeigt
+   =============================== */
+function loadCart() {
+  const container = document.getElementById('cart-content');
+  const titleEl = document.getElementById('cart-title');
+
+  const cart = getCart();
+
+  // Titel mit Anzahl
+  titleEl.textContent = `🛒 Ihr Warenkorb enthält ${cart.length} ${cart.length === 1 ? 'Artikel' : 'Artikel'}`;
+
+  // Leerer Warenkorb
+  if (!cart || cart.length === 0) {
+    container.innerHTML = `
+      <div class="empty-cart">
+        <p>Ihr Warenkorb ist derzeit leer.</p>
+        <a href="/katalog" class="btn" style="background:var(--brown);color:#fff;border-radius:6px;text-decoration:none;padding:10px 14px;display:inline-block;margin-top:12px;">← Zum Katalog</a>
+      </div>
+    `;
+    updateHeaderCartCount();
+    return;
+  }
+
+  // Build items HTML
+  let html = '';
+  cart.forEach(item => {
+    // item: { id, title, price? }
+    html += `
+      <div class="cart-item" data-id="${escapeHtml(String(item.id))}">
+        <img src="/bild/${encodeURIComponent(item.id)}" class="cart-image" alt="${escapeHtml(String(item.title))}">
+        <div class="cart-data">
+          <div class="cart-id">${escapeHtml(String(item.id))}</div>
+          <div class="cart-title">${escapeHtml(String(item.title))}</div>
+          <div style="color:#7e705f;margin-top:6px;">${item.price ? escapeHtml(String(item.price)) + ' €' : ''}</div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:8px;align-items:flex-end;">
+          <a href="/produkt/${encodeURIComponent(item.id)}" class="btn" style="background:transparent;color:var(--dark);border:1px solid var(--border);padding:8px 12px;">Details</a>
+          <button class="cart-btn remove-btn" data-id="${escapeHtml(String(item.id))}" type="button">Entfernen</button>
+        </div>
+      </div>
+    `;
+  });
+
+  container.innerHTML = html;
+
+  // Attach remove handlers (delegation not necessary here)
+  container.querySelectorAll('.remove-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const id = btn.getAttribute('data-id');
+      removeFromCart(id);
+    });
+  });
+
+  updateHeaderCartCount();
+}
+
+/* ===============================
+   Entfernen eines Items
+   - Löscht aus localStorage, rendert neu, aktualisiert Header
+   =============================== */
+function removeFromCart(id) {
+  if (!id) return;
+  let cart = getCart();
+  const newCart = cart.filter(item => String(item.id) !== String(id));
+  saveCart(newCart);
+  loadCart();
+  updateHeaderCartCount();
+}
+
+/* ===============================
+   Back-Button Setup (oben rechts in Box)
+   =============================== */
+function setupBackButton() {
+  const backBtn = document.getElementById('back-button');
+  if (!backBtn) return;
+  backBtn.addEventListener('click', () => {
+    if (window.history.length > 1) window.history.back();
+    else window.location.href = '/katalog';
+  });
+}
+
+/* ===============================
+   Init: beim Laden
+   - Lädt Warenkorb, setzt Back-Button, aktualisiert Header-Zähler
+   =============================== */
+document.addEventListener('DOMContentLoaded', () => {
+  setupBackButton();
+  loadCart();
+  updateHeaderCartCount();
+
+  // Optional: wenn andere Tabs die Daten ändern, auf das CustomEvent reagieren
+  document.addEventListener('ak_cart_updated', () => {
+    loadCart();
+    updateHeaderCartCount();
+  });
+});
+</script>
+</body>
+</html>

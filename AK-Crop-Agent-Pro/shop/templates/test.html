@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="utf-8">
+    <title>Datenbank-Test</title>
+</head>
+<body>
+
+<h1>Datenbank-Test</h1>
+
+{% for product in products %}
+
+<p>
+    {{ product[0] }}
+    -
+    {{ product[1] }}
+</p>
+
+{% endfor %}
+
+</body>
+</html>

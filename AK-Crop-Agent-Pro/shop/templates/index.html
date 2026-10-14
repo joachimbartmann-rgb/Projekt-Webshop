@@ -1,0 +1,2255 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aki & Kari – Historische Ansichtskarten Shop</title>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,300&family=Playfair+Display:wght@500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-paper: #f4efe6;
+            --card-bg: #fffcf7;
+            --primary-dark: #2c1d11;
+            --accent-brown: #7a5230;
+            --border-warm: #d9ccb8;
+            --text-main: #332821;
+            --text-muted: #6b5c51;
+            --heart-red: #c0392b;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Merriweather', serif;
+            background-color: var(--bg-paper);
+            color: var(--text-main);
+            line-height: 1.7;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background-color: var(--primary-dark);
+            color: #f1e7d0;
+            text-align: center;
+            border-bottom: 4px solid var(--accent-brown);
+        }
+
+        header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2rem;
+            letter-spacing: 1px;
+            padding: 20px 20px 5px;
+            color: #f7eedb;
+        }
+
+        /* Banner-Container: Vollständige Darstellung ohne Abschneiden */
+        .mascot-header-banner-container {
+            width: 100%;
+            background-color: var(--primary-dark);
+            border-top: 2px solid var(--accent-brown);
+            border-bottom: 2px solid var(--accent-brown);
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            max-height: 160px;
+        }
+
+        .mascot-header-banner {
+            width: 100%;
+            max-width: 1200px;
+            height: auto;
+            max-height: 155px;
+            object-fit: contain;
+            display: block;
+            margin: 0 auto;
+        }
+
+        nav {
+            background-color: #4a3423;
+            text-align: center;
+            padding: 12px 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+            position: sticky;
+            top: 0;
+            z-index: 999;
+        }
+
+        nav button {
+            background: none;
+            border: none;
+            color: #f1e7d0;
+            font-family: 'Merriweather', serif;
+            font-size: 0.95rem;
+            margin: 0 6px;
+            cursor: pointer;
+            padding: 5px 10px;
+            transition: all 0.2s ease;
+            border-bottom: 2px solid transparent;
+        }
+
+        nav button:hover, nav button.active {
+            color: #ffd991;
+            border-bottom-color: #ffd991;
+        }
+
+        .container {
+            max-width: 1350px;
+            margin: 35px auto;
+            padding: 0 20px;
+            flex: 1;
+            width: 100%;
+        }
+
+        .page { display: none; }
+        .page.active { display: block; animation: fadeIn 0.3s ease-in; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        h2 {
+            font-family: 'Playfair Display', serif;
+            color: var(--primary-dark);
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--accent-brown);
+            padding-bottom: 8px;
+        }
+
+        .hero {
+            background-color: #eae1d0;
+            border: 1px solid var(--border-warm);
+            padding: 35px 25px;
+            text-align: center;
+            border-radius: 4px;
+            margin-bottom: 35px;
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.03);
+        }
+
+        .hero h2 { border: none; padding: 0; margin-bottom: 12px; font-size: 2rem; }
+        .hero p { max-width: 750px; margin: 0 auto 20px; color: var(--text-muted); }
+
+        .mascot-middle-img {
+            width: 100%;
+            max-width: 320px;
+            height: auto;
+            border-radius: 6px;
+            margin: 0 auto 15px;
+            display: block;
+            border: 1px solid var(--border-warm);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+
+        .btn {
+            background-color: var(--accent-brown);
+            color: #fff;
+            border: none;
+            padding: 10px 22px;
+            font-family: 'Merriweather', serif;
+            font-size: 0.9rem;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            display: inline-block;
+            text-decoration: none;
+        }
+
+        .btn:hover { background-color: #5c3c21; }
+
+        /* Highlights auf Startseite */
+        .highlights-section {
+            margin-top: 40px;
+        }
+
+        .shop-layout {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 30px;
+        }
+
+        @media(max-width: 900px) {
+            .shop-layout { grid-template-columns: 1fr; }
+        }
+
+        .filter-box {
+            background: var(--card-bg);
+            border: 1px solid var(--border-warm);
+            padding: 20px;
+            border-radius: 4px;
+            height: fit-content;
+        }
+
+        .filter-group { margin-bottom: 20px; }
+        .filter-group h4 { color: var(--accent-brown); margin-bottom: 10px; font-size: 0.95rem; border-bottom: 1px solid var(--border-warm); padding-bottom: 4px; }
+        .filter-group input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            background: #fff;
+            border: 1px solid var(--border-warm);
+            border-radius: 3px;
+            font-family: inherit;
+        }
+
+        .active-filters-tag {
+            display: inline-block;
+            background: #e0d2bc;
+            color: var(--primary-dark);
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.78rem;
+            margin: 3px;
+        }
+
+        .checkbox-tree {
+            max-height: 240px;
+            overflow-y: auto;
+            background: #fff;
+            border: 1px solid var(--border-warm);
+            padding: 8px;
+            border-radius: 3px;
+        }
+
+        .checkbox-tree label {
+            display: block;
+            font-size: 0.88rem;
+            margin-bottom: 5px;
+            cursor: pointer;
+            color: var(--text-main);
+        }
+
+        .checkbox-tree label.sub-item { margin-left: 15px; color: var(--text-muted); }
+        .checkbox-tree label.city-item { margin-left: 30px; font-size: 0.82rem; }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 25px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-warm);
+            border-radius: 4px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.04);
+            transition: transform 0.2s;
+            position: relative;
+        }
+
+        .card:hover { transform: translateY(-3px); }
+
+        .wishlist-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255,255,255,0.9);
+            border: 1px solid var(--border-warm);
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1rem;
+            color: #ccc;
+            transition: color 0.2s;
+            z-index: 2;
+        }
+
+        .wishlist-btn.active { color: var(--heart-red); }
+
+        .card-img-container {
+            width: 100%;
+            height: 170px;
+            background: #e8e1d5;
+            border: 1px solid #d0c4b0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            margin-bottom: 12px;
+            border-radius: 2px;
+            cursor: pointer;
+        }
+
+        .card-img-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .card-id { font-size: 0.75rem; color: var(--text-muted); font-weight: bold; text-transform: uppercase; margin-bottom: 3px; }
+        .card-title { font-size: 0.93rem; font-weight: bold; color: var(--primary-dark); margin-bottom: 6px; line-height: 1.3; cursor: pointer; }
+        .card-title:hover { color: var(--accent-brown); }
+        .card-meta { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 4px; }
+        .card-condition { font-size: 0.76rem; color: #5a4738; margin-bottom: 8px; background: #f0e6d6; padding: 2px 6px; border-radius: 2px; width: fit-content; }
+        .card-price { font-size: 1.1rem; font-weight: bold; color: var(--accent-brown); margin-top: auto; margin-bottom: 10px; }
+
+        .card-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .card-actions button {
+            flex: 1;
+            padding: 8px;
+            font-size: 0.82rem;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--accent-brown);
+            color: var(--accent-brown);
+        }
+        .btn-outline:hover {
+            background: var(--accent-brown);
+            color: #fff;
+        }
+
+        /* Modal für Produktdetails */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.65);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            border: 2px solid var(--accent-brown);
+            padding: 30px;
+            border-radius: 6px;
+            max-width: 650px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px; right: 20px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--primary-dark);
+            background: none;
+            border: none;
+        }
+
+        .detail-gallery {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .detail-img-box {
+            flex: 1;
+            min-width: 250px;
+            height: 220px;
+            background: #e8e1d5;
+            border: 1px solid var(--border-warm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border-radius: 4px;
+        }
+
+        .detail-img-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Anfrageformular */
+        .inquiry-box {
+            background: var(--card-bg);
+            border: 1px solid var(--border-warm);
+            padding: 30px;
+            border-radius: 4px;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .form-group { margin-bottom: 18px; text-align: left; }
+        .form-group label { display: block; margin-bottom: 6px; color: var(--primary-dark); font-weight: bold; font-size: 0.88rem; }
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%;
+            padding: 10px;
+            background: #fff;
+            border: 1px solid var(--border-warm);
+            color: var(--text-main);
+            border-radius: 3px;
+            font-family: inherit;
+        }
+
+        .auth-bar {
+            background: #e8dfcf;
+            padding: 12px 20px;
+            border-radius: 4px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid var(--border-warm);
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .credit-badge {
+            background: #2c1d11;
+            color: #ffd991;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+
+        .upload-card {
+            background: var(--card-bg);
+            border: 2px dashed var(--accent-brown);
+            padding: 30px;
+            text-align: center;
+            border-radius: 6px;
+            margin-bottom: 25px;
+            cursor: pointer;
+            background-color: #faf5ec;
+        }
+
+        .result-box {
+            background: #fff;
+            border: 1px solid var(--border-warm);
+            padding: 20px;
+            margin-top: 20px;
+            border-left: 4px solid var(--accent-brown);
+            display: none;
+        }
+
+        footer {
+            background-color: var(--primary-dark);
+            color: #d9c5a0;
+            text-align: center;
+            padding: 25px 20px;
+            font-size: 0.88rem;
+            margin-top: 50px;
+            border-top: 3px solid var(--accent-brown);
+        }
+
+        footer a { color: #ffd991; text-decoration: underline; cursor: pointer; margin: 0 8px; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Historische Ansichtskarten & Sammlerstücke</h1>
+        <!-- Bannerbild vollständig ohne Abschneiden -->
+        <div class="mascot-header-banner-container">
+            <img src="C:\_docs\Ansichtskarten\aki-und-kari.png" alt="Aki & Kari Banner" class="mascot-header-banner" title="Aki & Kari begleiten Sie beim Stöbern!">
+        </div>
+    </header>
+
+    <nav>
+        <button onclick="showPage('start')" class="active" id="nav-start">Startseite</button>
+        <button onclick="showPage('shop')" id="nav-shop">Im Katalog stöbern</button>
+        <button onclick="showPage('merkliste')" id="nav-merkliste">❤️ Merkliste (<span id="wishlist-count">0</span>)</button>
+        <button onclick="showPage('suetterlin')" id="nav-suetterlin">📜 Sütterlin KI-Übersetzer</button>
+        <button onclick="showPage('ankauf')" id="nav-ankauf">Ankauf & Anfrage</button>
+        <button onclick="showPage('ueber')" id="nav-ueber">Über uns</button>
+        <button onclick="showPage('kontakt')" id="nav-kontakt">Kontakt</button>
+    </nav>
+
+    <div class="container">
+
+        <!-- 1. STARTSEITE -->
+        <div id="start" class="page active">
+            <div class="hero">
+                <img src="aki und kari 2.png" alt="Aki & Kari" class="mascot-middle-img">
+                <h2>Willkommen in unserem Fachgeschäft für historische Ansichtskarten</h2>
+                <p>Entdecken Sie erlesene Topografien, Raritäten und historische Schätze aus der Oberpfalz, Bayern und ganz Deutschland. Stöbern Sie bequem in unserem komplett digitalisierten Archiv.</p>
+                <button class="btn" onclick="showPage('shop')">Im Katalog stöbern</button>
+            </div>
+
+            <div class="highlights-section">
+                <h2>✨ Ausgewählte Archiv-Highlights</h2>
+                <div class="grid" id="homepage-highlights-grid">
+                    {% for product in products %}
+                        <!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aki & Kari – Historische Ansichtskarten Shop</title>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,300&family=Playfair+Display:wght@500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-paper: #f4efe6;
+            --card-bg: #fffcf7;
+            --primary-dark: #2c1d11;
+            --accent-brown: #7a5230;
+            --border-warm: #d9ccb8;
+            --text-main: #332821;
+            --text-muted: #6b5c51;
+            --heart-red: #c0392b;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Merriweather', serif;
+            background-color: var(--bg-paper);
+            color: var(--text-main);
+            line-height: 1.7;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background-color: var(--primary-dark);
+            color: #f1e7d0;
+            text-align: center;
+            border-bottom: 4px solid var(--accent-brown);
+        }
+
+        header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2rem;
+            letter-spacing: 1px;
+            padding: 20px 20px 5px;
+            color: #f7eedb;
+        }
+
+        /* Banner-Container: Vollständige Darstellung ohne Abschneiden */
+        .mascot-header-banner-container {
+            width: 100%;
+            background-color: var(--primary-dark);
+            border-top: 2px solid var(--accent-brown);
+            border-bottom: 2px solid var(--accent-brown);
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            max-height: 160px;
+        }
+
+        .mascot-header-banner {
+            width: 100%;
+            max-width: 1200px;
+            height: auto;
+            max-height: 155px;
+            object-fit: contain;
+            display: block;
+            margin: 0 auto;
+        }
+
+        nav {
+            background-color: #4a3423;
+            text-align: center;
+            padding: 12px 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+            position: sticky;
+            top: 0;
+            z-index: 999;
+        }
+
+        nav button {
+            background: none;
+            border: none;
+            color: #f1e7d0;
+            font-family: 'Merriweather', serif;
+            font-size: 0.95rem;
+            margin: 0 6px;
+            cursor: pointer;
+            padding: 5px 10px;
+            transition: all 0.2s ease;
+            border-bottom: 2px solid transparent;
+        }
+
+        nav button:hover, nav button.active {
+            color: #ffd991;
+            border-bottom-color: #ffd991;
+        }
+
+        .container {
+            max-width: 1350px;
+            margin: 35px auto;
+            padding: 0 20px;
+            flex: 1;
+            width: 100%;
+        }
+
+        .page { display: none; }
+        .page.active { display: block; animation: fadeIn 0.3s ease-in; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        h2 {
+            font-family: 'Playfair Display', serif;
+            color: var(--primary-dark);
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--accent-brown);
+            padding-bottom: 8px;
+        }
+
+        .hero {
+            background-color: #eae1d0;
+            border: 1px solid var(--border-warm);
+            padding: 35px 25px;
+            text-align: center;
+            border-radius: 4px;
+            margin-bottom: 35px;
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.03);
+        }
+
+        .hero h2 { border: none; padding: 0; margin-bottom: 12px; font-size: 2rem; }
+        .hero p { max-width: 750px; margin: 0 auto 20px; color: var(--text-muted); }
+
+        .mascot-middle-img {
+            width: 100%;
+            max-width: 320px;
+            height: auto;
+            border-radius: 6px;
+            margin: 0 auto 15px;
+            display: block;
+            border: 1px solid var(--border-warm);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+
+        .btn {
+            background-color: var(--accent-brown);
+            color: #fff;
+            border: none;
+            padding: 10px 22px;
+            font-family: 'Merriweather', serif;
+            font-size: 0.9rem;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            display: inline-block;
+            text-decoration: none;
+        }
+
+        .btn:hover { background-color: #5c3c21; }
+
+        /* Highlights auf Startseite */
+        .highlights-section {
+            margin-top: 40px;
+        }
+
+        .shop-layout {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 30px;
+        }
+
+        @media(max-width: 900px) {
+            .shop-layout { grid-template-columns: 1fr; }
+        }
+
+        .filter-box {
+            background: var(--card-bg);
+            border: 1px solid var(--border-warm);
+            padding: 20px;
+            border-radius: 4px;
+            height: fit-content;
+        }
+
+        .filter-group { margin-bottom: 20px; }
+        .filter-group h4 { color: var(--accent-brown); margin-bottom: 10px; font-size: 0.95rem; border-bottom: 1px solid var(--border-warm); padding-bottom: 4px; }
+        .filter-group input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            background: #fff;
+            border: 1px solid var(--border-warm);
+            border-radius: 3px;
+            font-family: inherit;
+        }
+
+        .active-filters-tag {
+            display: inline-block;
+            background: #e0d2bc;
+            color: var(--primary-dark);
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.78rem;
+            margin: 3px;
+        }
+
+        .checkbox-tree {
+            max-height: 240px;
+            overflow-y: auto;
+            background: #fff;
+            border: 1px solid var(--border-warm);
+            padding: 8px;
+            border-radius: 3px;
+        }
+
+        .checkbox-tree label {
+            display: block;
+            font-size: 0.88rem;
+            margin-bottom: 5px;
+            cursor: pointer;
+            color: var(--text-main);
+        }
+
+        .checkbox-tree label.sub-item { margin-left: 15px; color: var(--text-muted); }
+        .checkbox-tree label.city-item { margin-left: 30px; font-size: 0.82rem; }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 25px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-warm);
+            border-radius: 4px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.04);
+            transition: transform 0.2s;
+            position: relative;
+        }
+
+        .card:hover { transform: translateY(-3px); }
+
+        .wishlist-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255,255,255,0.9);
+            border: 1px solid var(--border-warm);
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1rem;
+            color: #ccc;
+            transition: color 0.2s;
+            z-index: 2;
+        }
+
+        .wishlist-btn.active { color: var(--heart-red); }
+
+        .card-img-container {
+            width: 100%;
+            height: 170px;
+            background: #e8e1d5;
+            border: 1px solid #d0c4b0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            margin-bottom: 12px;
+            border-radius: 2px;
+            cursor: pointer;
+        }
+
+        .card-img-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .card-id { font-size: 0.75rem; color: var(--text-muted); font-weight: bold; text-transform: uppercase; margin-bottom: 3px; }
+        .card-title { font-size: 0.93rem; font-weight: bold; color: var(--primary-dark); margin-bottom: 6px; line-height: 1.3; cursor: pointer; }
+        .card-title:hover { color: var(--accent-brown); }
+        .card-meta { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 4px; }
+        .card-condition { font-size: 0.76rem; color: #5a4738; margin-bottom: 8px; background: #f0e6d6; padding: 2px 6px; border-radius: 2px; width: fit-content; }
+        .card-price { font-size: 1.1rem; font-weight: bold; color: var(--accent-brown); margin-top: auto; margin-bottom: 10px; }
+
+        .card-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .card-actions button {
+            flex: 1;
+            padding: 8px;
+            font-size: 0.82rem;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--accent-brown);
+            color: var(--accent-brown);
+        }
+        .btn-outline:hover {
+            background: var(--accent-brown);
+            color: #fff;
+        }
+
+        /* Modal für Produktdetails */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.65);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            border: 2px solid var(--accent-brown);
+            padding: 30px;
+            border-radius: 6px;
+            max-width: 650px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px; right: 20px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--primary-dark);
+            background: none;
+            border: none;
+        }
+
+        .detail-gallery {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .detail-img-box {
+            flex: 1;
+            min-width: 250px;
+            height: 220px;
+            background: #e8e1d5;
+            border: 1px solid var(--border-warm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border-radius: 4px;
+        }
+
+        .detail-img-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Anfrageformular */
+        .inquiry-box {
+            background: var(--card-bg);
+            border: 1px solid var(--border-warm);
+            padding: 30px;
+            border-radius: 4px;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .form-group { margin-bottom: 18px; text-align: left; }
+        .form-group label { display: block; margin-bottom: 6px; color: var(--primary-dark); font-weight: bold; font-size: 0.88rem; }
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%;
+            padding: 10px;
+            background: #fff;
+            border: 1px solid var(--border-warm);
+            color: var(--text-main);
+            border-radius: 3px;
+            font-family: inherit;
+        }
+
+        .auth-bar {
+            background: #e8dfcf;
+            padding: 12px 20px;
+            border-radius: 4px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid var(--border-warm);
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .credit-badge {
+            background: #2c1d11;
+            color: #ffd991;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+
+        .upload-card {
+            background: var(--card-bg);
+            border: 2px dashed var(--accent-brown);
+            padding: 30px;
+            text-align: center;
+            border-radius: 6px;
+            margin-bottom: 25px;
+            cursor: pointer;
+            background-color: #faf5ec;
+        }
+
+        .result-box {
+            background: #fff;
+            border: 1px solid var(--border-warm);
+            padding: 20px;
+            margin-top: 20px;
+            border-left: 4px solid var(--accent-brown);
+            display: none;
+        }
+
+        footer {
+            background-color: var(--primary-dark);
+            color: #d9c5a0;
+            text-align: center;
+            padding: 25px 20px;
+            font-size: 0.88rem;
+            margin-top: 50px;
+            border-top: 3px solid var(--accent-brown);
+        }
+
+        footer a { color: #ffd991; text-decoration: underline; cursor: pointer; margin: 0 8px; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Historische Ansichtskarten & Sammlerstücke</h1>
+        <!-- Bannerbild vollständig ohne Abschneiden -->
+        <div class="mascot-header-banner-container">
+            <img src="static\aki-und-kari.png" alt="Aki & Kari Banner" class="mascot-header-banner" title="Aki & Kari begleiten Sie beim Stöbern!">
+        </div>
+    </header>
+
+    <nav>
+        <button onclick="showPage('start')" class="active" id="nav-start">Startseite</button>
+        <button onclick="showPage('shop')" id="nav-shop">Im Katalog stöbern</button>
+        <button onclick="showPage('merkliste')" id="nav-merkliste">❤️ Merkliste (<span id="wishlist-count">0</span>)</button>
+        <button onclick="showPage('suetterlin')" id="nav-suetterlin">📜 Sütterlin KI-Übersetzer</button>
+        <button onclick="showPage('ankauf')" id="nav-ankauf">Ankauf & Anfrage</button>
+        <button onclick="showPage('ueber')" id="nav-ueber">Über uns</button>
+        <button onclick="showPage('kontakt')" id="nav-kontakt">Kontakt</button>
+    </nav>
+
+    <div class="container">
+
+        <!-- 1. STARTSEITE -->
+        <div id="start" class="page active">
+            <div class="hero">
+                <img src="aki und kari 2.png" alt="Aki & Kari" class="mascot-middle-img">
+                <h2>Willkommen in unserem Fachgeschäft für historische Ansichtskarten</h2>
+                <p>Entdecken Sie erlesene Topografien, Raritäten und historische Schätze aus der Oberpfalz, Bayern und ganz Deutschland. Stöbern Sie bequem in unserem komplett digitalisierten Archiv.</p>
+                <button class="btn" onclick="showPage('shop')">Im Katalog stöbern</button>
+            </div>
+
+            <div class="highlights-section">
+                <h2>✨ Ausgewählte Archiv-Highlights</h2>
+                <p style="color:red;font-size:30px;">TEST TEST TEST</p>
+                <div class="grid">
+
+{% for product in products %}
+
+<a href="/produkt/{{ product[0] }}" style="text-decoration:none; color:inherit;">
+
+    <div class="card">
+
+        <div class="card-img-container">
+            <img src="/bild/{{ product[0] }}" alt="{{ product[1] }}">
+        </div>
+
+        <div class="card-id">
+            {{ product[0] }}
+        </div>
+
+        <div class="card-title">
+            {{ product[1] }}
+        </div>
+
+    </div>
+</a>
+
+{% endfor %}
+
+</div>
+            </div>
+        </div>
+
+        <!-- 2. KATALOG & HIERARCHISCHE FILTER -->
+        <div id="shop" class="page">
+            <h2>Katalog & Inventar (<span id="inventory-count">0</span> Ansichtskarten)</h2>
+            <p style="margin-bottom: 20px; color: var(--text-muted);">Nutzen Sie unsere dynamische Filterstruktur nach Land, Region und Stadt.</p>
+            
+            <div style="background:var(--card-bg);border:1px solid var(--border-warm);padding:15px;margin-bottom:20px;border-radius:4px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
+                <button class="btn" onclick="chooseImportFolder()">📂 Bilderordner auswählen</button>
+                <span style="color:var(--text-muted);font-size:.86rem;">Bitte <strong>C:\_docs\Ansichtskarten\Import</strong> auswählen. Alle Bilddateien darin werden automatisch als Katalogkarten angezeigt.</span>
+            </div>
+            <div class="shop-layout">
+                <aside class="filter-box">
+                    <div class="filter-group">
+                        <h4>🔍 Freitext-Suche</h4>
+                        <input type="text" id="search-input" placeholder="Titel, Verlag, ID..." oninput="filterCards()">
+                    </div>
+
+                    <div class="filter-group">
+                        <h4>📂 Aktive Filter</h4>
+                        <div id="active-filters-container" style="min-height: 30px; margin-bottom: 10px;">
+                            <span style="font-size: 0.8rem; color: var(--text-muted);">Keine Filter aktiv</span>
+                        </div>
+                        <button class="btn-outline btn" style="width:100%; font-size: 0.8rem; padding: 6px;" onclick="resetFilters()">Alle Filter zurücksetzen</button>
+                    </div>
+
+                    <div class="filter-group">
+                        <h4>🌍 Hierarchischer Filter</h4>
+                        <div class="checkbox-tree" id="hierarchical-filter-tree"></div>
+                    </div>
+                </aside>
+                
+                <main class="grid" id="inventory-grid"></main>
+            </div>
+        </div>
+
+        <!-- 3. MERKLISTE -->
+        <div id="merkliste" class="page">
+            <h2>❤️ Ihre persönliche Merkliste</h2>
+            <p style="margin-bottom: 20px; color: var(--text-muted);">Gespeicherte Artikel für Ihren späteren Kauf oder für eine unverbindliche Sammelanfrage.</p>
+            <div class="grid" id="wishlist-grid"></div>
+        </div>
+
+        <!-- 4. SÜTTERLIN KI-ÜBERSETZER -->
+        <div id="suetterlin" class="page">
+            <div class="auth-bar">
+                <div id="user-info">Status: <strong>Nicht angemeldet</strong></div>
+                <div>
+                    <span class="credit-badge">Guthaben: <strong id="user-credits">0</strong> Scans</span>
+                    <button class="btn" style="padding: 6px 14px; margin-left: 10px; font-size: 0.85rem;" id="auth-btn" onclick="openAuthModal()">Anmelden / Registrieren</button>
+                </div>
+            </div>
+
+            <h2>📜 Sütterlin & Kurrent Foto-Übersetzer</h2>
+            <p style="margin-bottom: 20px; color: var(--text-muted);">Laden Sie den Scan Ihrer Ansichtskarten-Rückseite hoch. Unsere KI entziffert altdeutsche Handschriften.</p>
+
+            <div class="upload-card" onclick="document.getElementById('file-input').click()">
+                <div style="font-size: 2.5rem; margin-bottom: 10px;">📂</div>
+                <h3 style="color: var(--primary-dark); margin-bottom: 5px;">Postkarten-Scan auswählen oder hierher ziehen</h3>
+                <p style="font-size: 0.88rem; color: var(--text-muted);">Unterstützt JPEG, PNG</p>
+                <input type="file" id="file-input" accept="image/*" style="display: none;" onchange="handleFileSelect(this.files)">
+            </div>
+
+            <div id="preview-box" style="margin-top: 15px; display: none; text-align: center;">
+                <img id="img-preview" style="max-height: 200px; border: 1px solid var(--border-warm); padding: 4px; background: #fff;">
+            </div>
+
+            <div style="text-align: center; margin-top: 25px;">
+                <button class="btn" id="transcribe-btn" style="display: none;" onclick="startTranscription()">Jetzt übersetzen (1 Scan abziehen)</button>
+            </div>
+
+            <div id="result-box" class="result-box">
+                <h3 style="color: var(--accent-brown); margin-bottom: 10px;">Transkribierter Text (Lateinische Schrift):</h3>
+                <p id="result-text" style="font-style: italic; font-size: 1.05rem;"></p>
+            </div>
+        </div>
+
+        <!-- 5. ANKAUF & ANFRAGE -->
+        <div id="ankauf" class="page">
+            <h2>Alte Ansichtskarten verkaufen & Sammlungsanfrage</h2>
+            <p style="margin-bottom: 25px; color: var(--text-muted);">Sie besitzen Nachlässe oder spezielle Postkarten-Sammlungen? Nutzen Sie unser strukturiertes Anfrageformular.</p>
+            
+            <div class="inquiry-box">
+                <form id="inquiry-form" onsubmit="handleInquirySubmit(event)">
+                    <div class="form-group">
+                        <label>Anfrage-Art *</label>
+                        <select id="inquiry-type" required>
+                            <option value="ankauf">Ankauf / Angebot meiner Sammlung</option>
+                            <option value="suche">Suchanfrage nach bestimmten Motiven/Orten</option>
+                            <option value="allgemein">Allgemeine Frage zu Artikel / Bestellung</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Ihr vollständiger Name *</label>
+                        <input type="text" id="inq-name" required placeholder="Vor- und Nachname">
+                    </div>
+                    <div class="form-group">
+                        <label>E-Mail-Adresse *</label>
+                        <input type="email" id="inq-email" required placeholder="ihre@email.de">
+                    </div>
+                    <div class="form-group">
+                        <label>Detaillierte Beschreibung / Nachricht *</label>
+                        <textarea id="inq-message" rows="5" required placeholder="Beschreiben Sie hier Ihre Sammlung, gewünschte Orte, Epochen oder Artikelnummern..."></textarea>
+                    </div>
+                    <div style="margin-bottom: 15px; font-size: 0.82rem; color: var(--text-muted);">* Pflichtfelder</div>
+                    <button type="submit" class="btn" style="width: 100%;">Anfrage verbindlich absenden</button>
+                </form>
+                <div id="inquiry-success" style="display:none; text-align:center; padding: 20px; color: var(--accent-brown);">
+                    <h3>Vielen Dank für Ihre Anfrage!</h3>
+                    <p style="margin-top: 10px; color: var(--text-main);">Wir haben Ihre Nachricht erhalten und werden uns zeitnah bei Ihnen melden.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 6. ÜBER UNS -->
+        <div id="ueber" class="page">
+            <h2>Über unser Archiv</h2>
+            <div style="background: var(--card-bg); padding: 30px; border: 1px solid var(--border-warm); border-radius: 4px;">
+                <p>Spezialisiert auf historische Ansichtskarten, Ortsansichten und philatelistische Raritäten mit Schwerpunkt auf Bayern, die Oberpfalz und das Böhmerland. Jedes Stück wird sorgfältig geprüft und dokumentiert.</p>
+            </div>
+        </div>
+
+        <!-- 7. KONTAKT -->
+        <div id="kontakt" class="page">
+            <h2>Kontakt</h2>
+            <div style="background: var(--card-bg); padding: 25px; border: 1px solid var(--border-warm); border-radius: 4px;">
+                <p><strong>Betreiber:</strong> Joachim Bartmann</p>
+                <p><strong>Standort:</strong> Kümmersbruck, Deutschland</p>
+                <p><strong>E-Mail:</strong> kontakt@ansichtskarten-shop.de</p>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- PRODUKT DETAIL MODAL -->
+    <div id="detail-modal" class="modal-overlay">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeDetailModal()">&times;</button>
+            <div id="detail-content"></div>
+        </div>
+    </div>
+
+    <!-- LOGIN MODAL -->
+    <div id="auth-modal" class="modal-overlay">
+        <div class="modal-content" style="max-width: 450px;">
+            <button class="modal-close" onclick="closeAuthModal()">&times;</button>
+            <h3 id="auth-title" style="color: var(--primary-dark); text-align: center;">Kunden-Anmeldung</h3>
+            <form id="auth-form" onsubmit="handleAuthSubmit(event)" style="margin-top: 15px;">
+                <div class="form-group">
+                    <label>E-Mail-Adresse</label>
+                    <input type="email" id="auth-email" required placeholder="ihre@email.de">
+                </div>
+                <div class="form-group">
+                    <label>Passwort</label>
+                    <input type="password" id="auth-pass" required minlength="6" placeholder="••••••••">
+                </div>
+                <button type="submit" class="btn" style="width: 100%; margin-top: 10px;" id="auth-submit-btn">Einloggen</button>
+            </form>
+            <p style="text-align: center; margin-top: 15px; font-size: 0.85rem;">
+                <a href="#" onclick="toggleAuthMode(); return false;" id="auth-toggle-link" style="color: var(--accent-brown);">Noch kein Konto? Jetzt registrieren (+1 Gratis-Scan!)</a>
+            </p>
+        </div>
+    </div>
+
+    <!-- RECHTLICHE MODALS (AGB, Impressum etc.) -->
+    <div id="legal-modal" class="modal-overlay">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeLegalModal()">&times;</button>
+            <div id="legal-content"></div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 Historische Ansichtskarten Shop · Joachim Bartmann</p>
+        <p style="margin-top: 8px;">
+            <a onclick="openLegal('impressum')">Impressum</a> | 
+            <a onclick="openLegal('datenschutz')">Datenschutz</a> | 
+            <a onclick="openLegal('agb')">AGB</a> | 
+            <a onclick="openLegal('widerruf')">Widerrufsbelehrung</a> | 
+            <a onclick="openLegal('versand')">Versand & Zahlung</a>
+        </p>
+        <p style="font-size: 0.78rem; margin-top: 8px; color: #a89478;">Differenzbesteuerung nach § 25a UStG für Sammlerstücke.</p>
+    </footer>
+
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "DEIN_FIREBASE_API_KEY",
+            authDomain: "DEIN_PROJECT.firebaseapp.com",
+            projectId: "DEIN_PROJECT_ID",
+            storageBucket: "DEIN_PROJECT.appspot.com",
+            messagingSenderId: "123456789",
+            appId: "1:123456789:web:abcdef"
+        };
+
+        const GEMINI_API_KEY = "DEIN_GEMINI_API_KEY";
+
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        let currentUser = null;
+        let userCredits = 0;
+        let selectedFile = null;
+        let isSignUpMode = false;
+        let wishlist = JSON.parse(localStorage.getItem('ak_wishlist')) || [];
+
+        // Bilder aus C:\_docs\Ansichtskarten\Import laden.
+        // Browser dürfen aus Sicherheitsgründen einen lokalen Ordner nicht allein anhand
+        // seines Windows-Pfads auslesen. Deshalb wird beim ersten Start der Ordner ausgewählt.
+        // Der Browser merkt sich die Freigabe (sofern unterstützt).
+        const IMPORT_PATH_LABEL = String.raw`C:\_docs\Ansichtskarten\Import`;
+        const IMAGE_EXTENSIONS = /\.(jpe?g|png|gif|webp|bmp|avif)$/i;
+        let inventoryData = [];
+        let imageUrlById = new Map();
+        let importDirHandle = null;
+
+        function makeItemFromFile(file, index) {
+            const base = file.name.replace(/\.[^.]+$/, '');
+            const id = `AK-2026-${String(index + 1).padStart(4, '0')}`;
+            return {
+                id,
+                title: base.replace(/[_-]+/g, ' ').trim() || `Ansichtskarte ${index + 1}`,
+                publisher: 'Archiv-Import', country: 'Deutschland', region: 'Nicht zugeordnet',
+                city: 'Nicht zugeordnet', category: 'Ansichtskarte', condition: 'Nicht erfasst',
+                price: 0, desc: `Importierte Bilddatei: ${file.name}`, fileName: file.name
+            };
+        }
+
+        async function chooseImportFolder() {
+            if (!('showDirectoryPicker' in window)) {
+                alert('Dieser Browser unterstützt die direkte Ordnerauswahl nicht. Bitte verwenden Sie einen aktuellen Chromium-basierten Browser.');
+                return;
+            }
+            try {
+                importDirHandle = await window.showDirectoryPicker({ mode: 'read' });
+                await loadImagesFromDirectory(importDirHandle);
+            } catch (err) {
+                if (err && err.name !== 'AbortError') alert('Ordner konnte nicht geöffnet werden: ' + err.message);
+            }
+        }
+
+        async function loadImagesFromDirectory(dirHandle) {
+            imageUrlById.forEach(url => URL.revokeObjectURL(url));
+            imageUrlById.clear();
+            const files = [];
+            for await (const entry of dirHandle.values()) {
+                if (entry.kind === 'file' && IMAGE_EXTENSIONS.test(entry.name)) files.push(await entry.getFile());
+            }
+            files.sort((a,b) => a.name.localeCompare(b.name, 'de', { numeric:true, sensitivity:'base' }));
+            inventoryData = files.map(makeItemFromFile);
+            files.forEach((file, i) => imageUrlById.set(inventoryData[i].id, URL.createObjectURL(file)));
+            refreshCatalog();
+        }
+
+        function getImageSrc(item) {
+            return imageUrlById.get(item.id) || 'aki und kari 2.png';
+        }
+
+        function refreshCatalog() {
+            const count = document.getElementById('inventory-count');
+            if (count) count.textContent = inventoryData.length;
+            initHierarchyFilter();
+            renderGrid(inventoryData);
+            renderHomepageHighlights();
+        }
+
+        function initHierarchyFilter() {
+            const treeContainer = document.getElementById('hierarchical-filter-tree');
+            let html = `
+                <label><input type="checkbox" id="chk-land" value="Deutschland" onchange="filterCards()" checked> <strong>Deutschland</strong></label>
+                <label class="sub-item"><input type="checkbox" id="chk-region" value="Bayern" onchange="filterCards()" checked> <strong>Bayern / Region</strong></label>
+            `;
+
+            const cities = [...new Set(inventoryData.map(item => item.city))].sort();
+            cities.forEach(city => {
+                html += `<label class="city-item"><input type="checkbox" class="city-chk" value="${city}" onchange="filterCards()" checked> ${city}</label>`;
+            });
+            treeContainer.innerHTML = html;
+            renderGrid(inventoryData);
+            renderHomepageHighlights();
+        }
+
+        function renderHomepageHighlights() {
+            const grid = document.getElementById('homepage-highlights-grid');
+            if(!grid) return;
+            const highlights = inventoryData.slice(0, 3);
+            let html = '';
+            highlights.forEach(item => {
+                const imgName = getImageSrc(item);
+                html += `
+                <div class="card">
+                    <div class="card-id">${item.id}</div>
+                    <div class="card-img-container" onclick="openDetail('${item.id}')">
+                        <img src="${imgName}" alt="${item.title}" onerror="this.onerror=null; this.src='aki und kari 2.png'; this.style.objectFit='contain';">
+                    </div>
+                    <div class="card-title" onclick="openDetail('${item.id}')">${item.title}</div>
+                    <div class="card-meta">📍 ${item.city}</div>
+                    <div class="card-price">${item.price.toFixed(2).replace('.', ',')} €</div>
+                    <div class="card-actions">
+                        <button class="btn btn-outline" onclick="openDetail('${item.id}')">Details</button>
+                        <button class="btn" onclick="alert('Artikel ${item.id} zum Warenkorb hinzugefügt!')">Kaufen</button>
+                    </div>
+                </div>`;
+            });
+            grid.innerHTML = html;
+        }
+
+        function renderGrid(data) {
+            const grid = document.getElementById('inventory-grid');
+            if(!grid) return;
+
+            if(data.length === 0) {
+                grid.innerHTML = `<p style="grid-column: 1/-1; text-align:center; padding: 40px; color: var(--text-muted);">Keine Ansichtskarten gefunden, die den ausgewählten Kriterien entsprechen.</p>`;
+                return;
+            }
+
+            let html = '';
+            data.forEach(item => {
+                const imgName = getImageSrc(item);
+                const isWishlisted = wishlist.includes(item.id);
+
+                html += `
+                <div class="card">
+                    <button class="wishlist-btn ${isWishlisted ? 'active' : ''}" onclick="toggleWishlist('${item.id}')" title="Auf Merkliste">♥</button>
+                    <div class="card-id">${item.id}</div>
+                    <div class="card-img-container" onclick="openDetail('${item.id}')">
+                        <img src="${imgName}" alt="${item.title}" onerror="this.onerror=null; this.src='aki und kari 2.png'; this.style.objectFit='contain';">
+                    </div>
+                    <div class="card-title" onclick="openDetail('${item.id}')">${item.title}</div>
+                    <div class="card-meta">📍 ${item.city} · 🏷️ ${item.publisher}</div>
+                    <div class="card-condition">Zustand: ${item.condition}</div>
+                    <div class="card-price">${item.price.toFixed(2).replace('.', ',')} €</div>
+                    <div class="card-actions">
+                        <button class="btn btn-outline" onclick="openDetail('${item.id}')">Details</button>
+                        <button class="btn" onclick="alert('Artikel ${item.id} zum Warenkorb hinzugefügt!')">Kaufen</button>
+                    </div>
+                </div>`;
+            });
+            grid.innerHTML = html;
+            updateWishlistUI();
+        }
+
+        function filterCards() {
+            const searchVal = document.getElementById('search-input').value.toLowerCase();
+            const landChecked = document.getElementById('chk-land').checked;
+            const regionChecked = document.getElementById('chk-region').checked;
+            const selectedCities = Array.from(document.querySelectorAll('.city-chk:checked')).map(c => c.value);
+
+            const activeTagsContainer = document.getElementById('active-filters-container');
+            let tagsHtml = '';
+
+            if(!landChecked || !regionChecked) {
+                tagsHtml += `<span class="active-filters-tag">Einschränkung aktiv</span>`;
+            }
+            selectedCities.forEach(c => {
+                tagsHtml += `<span class="active-filters-tag">📍 ${c}</span>`;
+            });
+            if(selectedCities.length === 0) tagsHtml = `<span style="font-size:0.8rem; color:var(--heart-red);">Keine Stadt ausgewählt</span>`;
+            activeTagsContainer.innerHTML = tagsHtml;
+
+            const filtered = inventoryData.filter(item => {
+                const matchesSearch = item.title.toLowerCase().includes(searchVal) || 
+                                      item.publisher.toLowerCase().includes(searchVal) || 
+                                      item.id.toLowerCase().includes(searchVal);
+
+                if(!landChecked) return false;
+                if(!regionChecked) return false;
+                const matchesCity = selectedCities.includes(item.city);
+
+                return matchesSearch && matchesCity;
+            });
+
+            renderGrid(filtered);
+        }
+
+        function resetFilters() {
+            document.getElementById('search-input').value = '';
+            document.getElementById('chk-land').checked = true;
+            document.getElementById('chk-region').checked = true;
+            document.querySelectorAll('.city-chk').forEach(c => c.checked = true);
+            filterCards();
+        }
+
+        function toggleWishlist(id) {
+            const idx = wishlist.indexOf(id);
+            if(idx > -1) {
+                wishlist.splice(idx, 1);
+            } else {
+                wishlist.push(id);
+            }
+            localStorage.setItem('ak_wishlist', JSON.stringify(wishlist));
+            filterCards();
+            renderWishlistPage();
+        }
+
+        function updateWishlistUI() {
+            document.getElementById('wishlist-count').textContent = wishlist.length;
+        }
+
+        function renderWishlistPage() {
+            const grid = document.getElementById('wishlist-grid');
+            if(!grid) return;
+            const items = inventoryData.filter(i => wishlist.includes(i.id));
+            if(items.length === 0) {
+                grid.innerHTML = `<p style="grid-column: 1/-1; text-align:center; padding: 40px; color: var(--text-muted);">Ihre Merkliste ist derzeit leer.</p>`;
+                return;
+            }
+            let html = '';
+            items.forEach(item => {
+                const imgName = getImageSrc(item);
+                html += `
+                <div class="card">
+                    <button class="wishlist-btn active" onclick="toggleWishlist('${item.id}')">♥</button>
+                    <div class="card-id">${item.id}</div>
+                    <div class="card-img-container" onclick="openDetail('${item.id}')">
+                        <img src="${imgName}" alt="${item.title}" onerror="this.onerror=null; this.src='aki und kari 2.png'; this.style.objectFit='contain';">
+                    </div>
+                    <div class="card-title">${item.title}</div>
+                    <div class="card-price">${item.price.toFixed(2).replace('.', ',')} €</div>
+                    <button class="btn" onclick="alert('Artikel ${item.id} aus Merkliste in Warenkorb gelegt!')">In den Warenkorb</button>
+                </div>`;
+            });
+            grid.innerHTML = html;
+        }
+
+        function openDetail(id) {
+            const item = inventoryData.find(i => i.id === id);
+            if(!item) return;
+            const imgName = getImageSrc(item);
+
+            const content = document.getElementById('detail-content');
+            content.innerHTML = `
+                <h2 style="font-family:'Playfair Display',serif; margin-bottom:10px;">${item.title}</h2>
+                <div style="font-size:0.85rem; color:var(--text-muted); margin-bottom:15px;">Artikel-ID: <strong>${item.id}</strong></div>
+                
+                <div class="detail-gallery">
+                    <div class="detail-img-box" title="Vorderseite">
+                        <img src="${imgName}" alt="Vorderseite" onerror="this.onerror=null; this.src='aki und kari 2.png'; this.style.objectFit='contain';">
+                    </div>
+                    <div class="detail-img-box" title="Rückseite / Stempel">
+                        <img src="aki und kari 2.png" alt="Rückseite Platzhalter" style="object-fit:contain;">
+                    </div>
+                </div>
+
+                <div style="margin-bottom:15px;">
+                    <p><strong>Region / Stadt:</strong> ${item.city}, ${item.region}</p>
+                    <p><strong>Verlag:</strong> ${item.publisher}</p>
+                    <p><strong>Zustand:</strong> ${item.condition}</p>
+                    <p style="margin-top:10px;"><strong>Beschreibung:</strong> ${item.desc}</p>
+                </div>
+
+                <div style="display:flex; justify-content:space-between; align-items:center; border-top: 1px solid var(--border-warm); padding-top:15px; margin-top:15px;">
+                    <div style="font-size:1.4rem; font-weight:bold; color:var(--accent-brown);">${item.price.toFixed(2).replace('.', ',')} €</div>
+                    <button class="btn" onclick="alert('Artikel ${item.id} erfolgreich bestellt!'); closeDetailModal();">Jetzt Kaufen</button>
+                </div>
+            `;
+            document.getElementById('detail-modal').style.display = 'flex';
+        }
+
+        function closeDetailModal() { document.getElementById('detail-modal').style.display = 'none'; }
+
+        function handleInquirySubmit(e) {
+            e.preventDefault();
+            document.getElementById('inquiry-form').style.display = 'none';
+            document.getElementById('inquiry-success').style.display = 'block';
+        }
+
+        function openLegal(type) {
+            const modal = document.getElementById('legal-modal');
+            const content = document.getElementById('legal-content');
+            let title = "";
+            let text = "";
+
+            switch(type) {
+                case 'impressum':
+                    title = "Impressum";
+                    text = "<p><strong>Angaben gemäß § 5 TMG:</strong><br>Joachim Bartmann<br>Kümmersbruck<br>Deutschland</p><p><strong>Kontakt:</strong><br>E-Mail: kontakt@ansichtskarten-shop.de</p>";
+                    break;
+                case 'datenschutz':
+                    title = "Datenschutzerklärung";
+                    text = "<p>Wir nehmen den Schutz Ihrer persönlichen Daten ernst. Ihre Daten werden ausschließlich zur Abwicklung Ihrer Bestellungen und Anfragen verwendet.</p>";
+                    break;
+                case 'agb':
+                    title = "Allgemeine Geschäftsbedingungen";
+                    text = "<p>1. Geltungsbereich<br>Für alle Lieferungen gelten unsere AGB.</p><p>2. Preise<br>Alle Preise sind Endpreise. Differenzbesteuert nach § 25a UStG.</p>";
+                    break;
+                case 'widerruf':
+                    title = "Widerrufsbelehrung";
+                    text = "<p>Sie haben das Recht, binnen vierzehn Tagen ohne Angabe von Gründen diesen Vertrag zu widerrufen.</p>";
+                    break;
+                case 'versand':
+                    title = "Versand & Zahlung";
+                    text = "<p>Der Versand erfolgt sicher verpackt per Deutsche Post / DHL. Zahlungsarten: Vorkasse, PayPal.</p>";
+                    break;
+            }
+
+            content.innerHTML = `<h2 style="font-family:'Playfair Display',serif; margin-bottom:15px;">${title}</h2>${text}`;
+            modal.style.display = 'flex';
+        }
+
+        function closeLegalModal() { document.getElementById('legal-modal').style.display = 'none'; }
+
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+            if(document.getElementById('nav-' + pageId)) {
+                document.getElementById('nav-' + pageId).classList.add('active');
+            }
+            window.scrollTo(0, 0);
+            if(pageId === 'merkliste') renderWishlistPage();
+        }
+
+        function openAuthModal() { document.getElementById('auth-modal').style.display = 'flex'; }
+        function closeAuthModal() { document.getElementById('auth-modal').style.display = 'none'; }
+
+        function toggleAuthMode() {
+            isSignUpMode = !isSignUpMode;
+            document.getElementById('auth-title').textContent = isSignUpMode ? "Konto erstellen (+1 Gratis-Scan)" : "Kunden-Anmeldung";
+            document.getElementById('auth-submit-btn').textContent = isSignUpMode ? "Jetzt Registrieren" : "Einloggen";
+            document.getElementById('auth-toggle-link').textContent = isSignUpMode ? "Bereits ein Konto? Hier einloggen" : "Noch kein Konto? Jetzt registrieren (+1 Gratis-Scan!)";
+        }
+
+        async function handleAuthSubmit(e) {
+            e.preventDefault();
+            const email = document.getElementById('auth-email').value;
+            const pass = document.getElementById('auth-pass').value;
+
+            try {
+                if (isSignUpMode) {
+                    await auth.createUserWithEmailAndPassword(email, pass);
+                    alert("Registrierung erfolgreich! 1 Gratis-Scan wurde gutgeschrieben.");
+                } else {
+                    await auth.signInWithEmailAndPassword(email, pass);
+                }
+                closeAuthModal();
+            } catch (err) {
+                alert("Fehler: " + err.message);
+            }
+        }
+
+        function handleFileSelect(files) {
+            if (files.length === 0) return;
+            selectedFile = files[0];
+            const reader = new FileReader();
+            reader.onload = e => {
+                document.getElementById('img-preview').src = e.target.result;
+                document.getElementById('preview-box').style.display = 'block';
+                document.getElementById('transcribe-btn').style.display = 'inline-block';
+            };
+            reader.readAsDataURL(selectedFile);
+        }
+
+        function fileToBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => resolve(reader.result.split(',')[1]);
+                reader.onerror = error => reject(error);
+                reader.readAsDataURL(file);
+            });
+        }
+
+        async function startTranscription() {
+            if (!currentUser) {
+                alert("Bitte loggen Sie sich zuerst ein!");
+                openAuthModal();
+                return;
+            }
+            if (userCredits <= 0) {
+                alert("Ihr Guthaben ist aufgebraucht.");
+                return;
+            }
+
+            const btn = document.getElementById('transcribe-btn');
+            const resultBox = document.getElementById('result-box');
+            const resultText = document.getElementById('result-text');
+
+            btn.disabled = true;
+            btn.textContent = "📜 KI analysiert Handschrift...";
+            resultBox.style.display = 'block';
+            resultText.textContent = "Handschrift wird entziffert...";
+
+            try {
+                const base64Image = await fileToBase64(selectedFile);
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{
+                            parts: [
+                                { text: "Transkribiere den handschriftlichen Text exakt in moderne lateinische Schrift." },
+                                { inline_data: { mime_type: selectedFile.type || "image/jpeg", data: base64Image } }
+                            ]
+                        }]
+                    })
+                });
+
+                const data = await response.json();
+                if (data.candidates && data.candidates[0].content.parts[0].text) {
+                    resultText.textContent = `"${data.candidates[0].content.parts[0].text.trim()}"`;
+                    userCredits--;
+                    await db.collection('users').doc(currentUser.uid).update({ credits: userCredits });
+                    document.getElementById('user-credits').textContent = userCredits;
+                } else {
+                    resultText.textContent = "Handschrift konnte nicht gelesen werden.";
+                }
+            } catch (err) {
+                resultText.textContent = "Fehler bei der Verbindung.";
+            } finally {
+                btn.disabled = false;
+                btn.textContent = "Jetzt übersetzen (1 Scan abziehen)";
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            refreshCatalog();
+            updateWishlistUI();
+        });
+    </script>
+</body>
+</html>{{ product[0] }}
+
+{{ product[1] }}
+{% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. KATALOG & HIERARCHISCHE FILTER -->
+        <div id="shop" class="page">
+            <h2>Katalog & Inventar (<span id="inventory-count">0</span> Ansichtskarten)</h2>
+            <p style="margin-bottom: 20px; color: var(--text-muted);">Nutzen Sie unsere dynamische Filterstruktur nach Land, Region und Stadt.</p>
+            
+            <div style="background:var(--card-bg);border:1px solid var(--border-warm);padding:15px;margin-bottom:20px;border-radius:4px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
+                <button class="btn" onclick="chooseImportFolder()">📂 Bilderordner auswählen</button>
+                <span style="color:var(--text-muted);font-size:.86rem;">Bitte <strong>C:\_docs\Ansichtskarten\Import</strong> auswählen. Alle Bilddateien darin werden automatisch als Katalogkarten angezeigt.</span>
+            </div>
+            <div class="shop-layout">
+                <aside class="filter-box">
+                    <div class="filter-group">
+                        <h4>🔍 Freitext-Suche</h4>
+                        <input type="text" id="search-input" placeholder="Titel, Verlag, ID..." oninput="filterCards()">
+                    </div>
+
+                    <div class="filter-group">
+                        <h4>📂 Aktive Filter</h4>
+                        <div id="active-filters-container" style="min-height: 30px; margin-bottom: 10px;">
+                            <span style="font-size: 0.8rem; color: var(--text-muted);">Keine Filter aktiv</span>
+                        </div>
+                        <button class="btn-outline btn" style="width:100%; font-size: 0.8rem; padding: 6px;" onclick="resetFilters()">Alle Filter zurücksetzen</button>
+                    </div>
+
+                    <div class="filter-group">
+                        <h4>🌍 Hierarchischer Filter</h4>
+                        <div class="checkbox-tree" id="hierarchical-filter-tree"></div>
+                    </div>
+                </aside>
+                
+                <main class="grid" id="inventory-grid"></main>
+            </div>
+        </div>
+
+        <!-- 3. MERKLISTE -->
+        <div id="merkliste" class="page">
+            <h2>❤️ Ihre persönliche Merkliste</h2>
+            <p style="margin-bottom: 20px; color: var(--text-muted);">Gespeicherte Artikel für Ihren späteren Kauf oder für eine unverbindliche Sammelanfrage.</p>
+            <div class="grid" id="wishlist-grid"></div>
+        </div>
+
+        <!-- 4. SÜTTERLIN KI-ÜBERSETZER -->
+        <div id="suetterlin" class="page">
+            <div class="auth-bar">
+                <div id="user-info">Status: <strong>Nicht angemeldet</strong></div>
+                <div>
+                    <span class="credit-badge">Guthaben: <strong id="user-credits">0</strong> Scans</span>
+                    <button class="btn" style="padding: 6px 14px; margin-left: 10px; font-size: 0.85rem;" id="auth-btn" onclick="openAuthModal()">Anmelden / Registrieren</button>
+                </div>
+            </div>
+
+            <h2>📜 Sütterlin & Kurrent Foto-Übersetzer</h2>
+            <p style="margin-bottom: 20px; color: var(--text-muted);">Laden Sie den Scan Ihrer Ansichtskarten-Rückseite hoch. Unsere KI entziffert altdeutsche Handschriften.</p>
+
+            <div class="upload-card" onclick="document.getElementById('file-input').click()">
+                <div style="font-size: 2.5rem; margin-bottom: 10px;">📂</div>
+                <h3 style="color: var(--primary-dark); margin-bottom: 5px;">Postkarten-Scan auswählen oder hierher ziehen</h3>
+                <p style="font-size: 0.88rem; color: var(--text-muted);">Unterstützt JPEG, PNG</p>
+                <input type="file" id="file-input" accept="image/*" style="display: none;" onchange="handleFileSelect(this.files)">
+            </div>
+
+            <div id="preview-box" style="margin-top: 15px; display: none; text-align: center;">
+                <img id="img-preview" style="max-height: 200px; border: 1px solid var(--border-warm); padding: 4px; background: #fff;">
+            </div>
+
+            <div style="text-align: center; margin-top: 25px;">
+                <button class="btn" id="transcribe-btn" style="display: none;" onclick="startTranscription()">Jetzt übersetzen (1 Scan abziehen)</button>
+            </div>
+
+            <div id="result-box" class="result-box">
+                <h3 style="color: var(--accent-brown); margin-bottom: 10px;">Transkribierter Text (Lateinische Schrift):</h3>
+                <p id="result-text" style="font-style: italic; font-size: 1.05rem;"></p>
+            </div>
+        </div>
+
+        <!-- 5. ANKAUF & ANFRAGE -->
+        <div id="ankauf" class="page">
+            <h2>Alte Ansichtskarten verkaufen & Sammlungsanfrage</h2>
+            <p style="margin-bottom: 25px; color: var(--text-muted);">Sie besitzen Nachlässe oder spezielle Postkarten-Sammlungen? Nutzen Sie unser strukturiertes Anfrageformular.</p>
+            
+            <div class="inquiry-box">
+                <form id="inquiry-form" onsubmit="handleInquirySubmit(event)">
+                    <div class="form-group">
+                        <label>Anfrage-Art *</label>
+                        <select id="inquiry-type" required>
+                            <option value="ankauf">Ankauf / Angebot meiner Sammlung</option>
+                            <option value="suche">Suchanfrage nach bestimmten Motiven/Orten</option>
+                            <option value="allgemein">Allgemeine Frage zu Artikel / Bestellung</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Ihr vollständiger Name *</label>
+                        <input type="text" id="inq-name" required placeholder="Vor- und Nachname">
+                    </div>
+                    <div class="form-group">
+                        <label>E-Mail-Adresse *</label>
+                        <input type="email" id="inq-email" required placeholder="ihre@email.de">
+                    </div>
+                    <div class="form-group">
+                        <label>Detaillierte Beschreibung / Nachricht *</label>
+                        <textarea id="inq-message" rows="5" required placeholder="Beschreiben Sie hier Ihre Sammlung, gewünschte Orte, Epochen oder Artikelnummern..."></textarea>
+                    </div>
+                    <div style="margin-bottom: 15px; font-size: 0.82rem; color: var(--text-muted);">* Pflichtfelder</div>
+                    <button type="submit" class="btn" style="width: 100%;">Anfrage verbindlich absenden</button>
+                </form>
+                <div id="inquiry-success" style="display:none; text-align:center; padding: 20px; color: var(--accent-brown);">
+                    <h3>Vielen Dank für Ihre Anfrage!</h3>
+                    <p style="margin-top: 10px; color: var(--text-main);">Wir haben Ihre Nachricht erhalten und werden uns zeitnah bei Ihnen melden.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 6. ÜBER UNS -->
+        <div id="ueber" class="page">
+            <h2>Über unser Archiv</h2>
+            <div style="background: var(--card-bg); padding: 30px; border: 1px solid var(--border-warm); border-radius: 4px;">
+                <p>Spezialisiert auf historische Ansichtskarten, Ortsansichten und philatelistische Raritäten mit Schwerpunkt auf Bayern, die Oberpfalz und das Böhmerland. Jedes Stück wird sorgfältig geprüft und dokumentiert.</p>
+            </div>
+        </div>
+
+        <!-- 7. KONTAKT -->
+        <div id="kontakt" class="page">
+            <h2>Kontakt</h2>
+            <div style="background: var(--card-bg); padding: 25px; border: 1px solid var(--border-warm); border-radius: 4px;">
+                <p><strong>Betreiber:</strong> Joachim Bartmann</p>
+                <p><strong>Standort:</strong> Kümmersbruck, Deutschland</p>
+                <p><strong>E-Mail:</strong> kontakt@ansichtskarten-shop.de</p>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- PRODUKT DETAIL MODAL -->
+    <div id="detail-modal" class="modal-overlay">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeDetailModal()">&times;</button>
+            <div id="detail-content"></div>
+        </div>
+    </div>
+
+    <!-- LOGIN MODAL -->
+    <div id="auth-modal" class="modal-overlay">
+        <div class="modal-content" style="max-width: 450px;">
+            <button class="modal-close" onclick="closeAuthModal()">&times;</button>
+            <h3 id="auth-title" style="color: var(--primary-dark); text-align: center;">Kunden-Anmeldung</h3>
+            <form id="auth-form" onsubmit="handleAuthSubmit(event)" style="margin-top: 15px;">
+                <div class="form-group">
+                    <label>E-Mail-Adresse</label>
+                    <input type="email" id="auth-email" required placeholder="ihre@email.de">
+                </div>
+                <div class="form-group">
+                    <label>Passwort</label>
+                    <input type="password" id="auth-pass" required minlength="6" placeholder="••••••••">
+                </div>
+                <button type="submit" class="btn" style="width: 100%; margin-top: 10px;" id="auth-submit-btn">Einloggen</button>
+            </form>
+            <p style="text-align: center; margin-top: 15px; font-size: 0.85rem;">
+                <a href="#" onclick="toggleAuthMode(); return false;" id="auth-toggle-link" style="color: var(--accent-brown);">Noch kein Konto? Jetzt registrieren (+1 Gratis-Scan!)</a>
+            </p>
+        </div>
+    </div>
+
+    <!-- RECHTLICHE MODALS (AGB, Impressum etc.) -->
+    <div id="legal-modal" class="modal-overlay">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeLegalModal()">&times;</button>
+            <div id="legal-content"></div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 Historische Ansichtskarten Shop · Joachim Bartmann</p>
+        <p style="margin-top: 8px;">
+            <a onclick="openLegal('impressum')">Impressum</a> | 
+            <a onclick="openLegal('datenschutz')">Datenschutz</a> | 
+            <a onclick="openLegal('agb')">AGB</a> | 
+            <a onclick="openLegal('widerruf')">Widerrufsbelehrung</a> | 
+            <a onclick="openLegal('versand')">Versand & Zahlung</a>
+        </p>
+        <p style="font-size: 0.78rem; margin-top: 8px; color: #a89478;">Differenzbesteuerung nach § 25a UStG für Sammlerstücke.</p>
+    </footer>
+
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "DEIN_FIREBASE_API_KEY",
+            authDomain: "DEIN_PROJECT.firebaseapp.com",
+            projectId: "DEIN_PROJECT_ID",
+            storageBucket: "DEIN_PROJECT.appspot.com",
+            messagingSenderId: "123456789",
+            appId: "1:123456789:web:abcdef"
+        };
+
+        const GEMINI_API_KEY = "DEIN_GEMINI_API_KEY";
+
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        let currentUser = null;
+        let userCredits = 0;
+        let selectedFile = null;
+        let isSignUpMode = false;
+        let wishlist = JSON.parse(localStorage.getItem('ak_wishlist')) || [];
+
+        // Bilder aus C:\_docs\Ansichtskarten\Import laden.
+        // Browser dürfen aus Sicherheitsgründen einen lokalen Ordner nicht allein anhand
+        // seines Windows-Pfads auslesen. Deshalb wird beim ersten Start der Ordner ausgewählt.
+        // Der Browser merkt sich die Freigabe (sofern unterstützt).
+        const IMPORT_PATH_LABEL = String.raw`C:\_docs\Ansichtskarten\Import`;
+        const IMAGE_EXTENSIONS = /\.(jpe?g|png|gif|webp|bmp|avif)$/i;
+        let inventoryData = [];
+        let imageUrlById = new Map();
+        let importDirHandle = null;
+
+        function makeItemFromFile(file, index) {
+            const base = file.name.replace(/\.[^.]+$/, '');
+            const id = `AK-2026-${String(index + 1).padStart(4, '0')}`;
+            return {
+                id,
+                title: base.replace(/[_-]+/g, ' ').trim() || `Ansichtskarte ${index + 1}`,
+                publisher: 'Archiv-Import', country: 'Deutschland', region: 'Nicht zugeordnet',
+                city: 'Nicht zugeordnet', category: 'Ansichtskarte', condition: 'Nicht erfasst',
+                price: 0, desc: `Importierte Bilddatei: ${file.name}`, fileName: file.name
+            };
+        }
+
+        async function chooseImportFolder() {
+            if (!('showDirectoryPicker' in window)) {
+                alert('Dieser Browser unterstützt die direkte Ordnerauswahl nicht. Bitte verwenden Sie einen aktuellen Chromium-basierten Browser.');
+                return;
+            }
+            try {
+                importDirHandle = await window.showDirectoryPicker({ mode: 'read' });
+                await loadImagesFromDirectory(importDirHandle);
+            } catch (err) {
+                if (err && err.name !== 'AbortError') alert('Ordner konnte nicht geöffnet werden: ' + err.message);
+            }
+        }
+
+        async function loadImagesFromDirectory(dirHandle) {
+            imageUrlById.forEach(url => URL.revokeObjectURL(url));
+            imageUrlById.clear();
+            const files = [];
+            for await (const entry of dirHandle.values()) {
+                if (entry.kind === 'file' && IMAGE_EXTENSIONS.test(entry.name)) files.push(await entry.getFile());
+            }
+            files.sort((a,b) => a.name.localeCompare(b.name, 'de', { numeric:true, sensitivity:'base' }));
+            inventoryData = files.map(makeItemFromFile);
+            files.forEach((file, i) => imageUrlById.set(inventoryData[i].id, URL.createObjectURL(file)));
+            refreshCatalog();
+        }
+
+        function getImageSrc(item) {
+            return imageUrlById.get(item.id) || 'aki und kari 2.png';
+        }
+
+        function refreshCatalog() {
+            const count = document.getElementById('inventory-count');
+            if (count) count.textContent = inventoryData.length;
+            initHierarchyFilter();
+            renderGrid(inventoryData);
+            renderHomepageHighlights();
+        }
+
+        function initHierarchyFilter() {
+            const treeContainer = document.getElementById('hierarchical-filter-tree');
+            let html = `
+                <label><input type="checkbox" id="chk-land" value="Deutschland" onchange="filterCards()" checked> <strong>Deutschland</strong></label>
+                <label class="sub-item"><input type="checkbox" id="chk-region" value="Bayern" onchange="filterCards()" checked> <strong>Bayern / Region</strong></label>
+            `;
+
+            const cities = [...new Set(inventoryData.map(item => item.city))].sort();
+            cities.forEach(city => {
+                html += `<label class="city-item"><input type="checkbox" class="city-chk" value="${city}" onchange="filterCards()" checked> ${city}</label>`;
+            });
+            treeContainer.innerHTML = html;
+            renderGrid(inventoryData);
+            renderHomepageHighlights();
+        }
+
+        function renderHomepageHighlights() {
+            const grid = document.getElementById('homepage-highlights-grid');
+            if(!grid) return;
+            const highlights = inventoryData.slice(0, 3);
+            let html = '';
+            highlights.forEach(item => {
+                const imgName = getImageSrc(item);
+                html += `
+                <div class="card">
+                    <div class="card-id">${item.id}</div>
+                    <div class="card-img-container" onclick="openDetail('${item.id}')">
+                        <img src="${imgName}" alt="${item.title}" onerror="this.onerror=null; this.src='aki und kari 2.png'; this.style.objectFit='contain';">
+                    </div>
+                    <div class="card-title" onclick="openDetail('${item.id}')">${item.title}</div>
+                    <div class="card-meta">📍 ${item.city}</div>
+                    <div class="card-price">${item.price.toFixed(2).replace('.', ',')} €</div>
+                    <div class="card-actions">
+                        <button class="btn btn-outline" onclick="openDetail('${item.id}')">Details</button>
+                        <button class="btn" onclick="alert('Artikel ${item.id} zum Warenkorb hinzugefügt!')">Kaufen</button>
+                    </div>
+                </div>`;
+            });
+            grid.innerHTML = html;
+        }
+
+        function renderGrid(data) {
+            const grid = document.getElementById('inventory-grid');
+            if(!grid) return;
+
+            if(data.length === 0) {
+                grid.innerHTML = `<p style="grid-column: 1/-1; text-align:center; padding: 40px; color: var(--text-muted);">Keine Ansichtskarten gefunden, die den ausgewählten Kriterien entsprechen.</p>`;
+                return;
+            }
+
+            let html = '';
+            data.forEach(item => {
+                const imgName = getImageSrc(item);
+                const isWishlisted = wishlist.includes(item.id);
+
+                html += `
+                <div class="card">
+                    <button class="wishlist-btn ${isWishlisted ? 'active' : ''}" onclick="toggleWishlist('${item.id}')" title="Auf Merkliste">♥</button>
+                    <div class="card-id">${item.id}</div>
+                    <div class="card-img-container" onclick="openDetail('${item.id}')">
+                        <img src="${imgName}" alt="${item.title}" onerror="this.onerror=null; this.src='aki und kari 2.png'; this.style.objectFit='contain';">
+                    </div>
+                    <div class="card-title" onclick="openDetail('${item.id}')">${item.title}</div>
+                    <div class="card-meta">📍 ${item.city} · 🏷️ ${item.publisher}</div>
+                    <div class="card-condition">Zustand: ${item.condition}</div>
+                    <div class="card-price">${item.price.toFixed(2).replace('.', ',')} €</div>
+                    <div class="card-actions">
+                        <button class="btn btn-outline" onclick="openDetail('${item.id}')">Details</button>
+                        <button class="btn" onclick="alert('Artikel ${item.id} zum Warenkorb hinzugefügt!')">Kaufen</button>
+                    </div>
+                </div>`;
+            });
+            grid.innerHTML = html;
+            updateWishlistUI();
+        }
+
+        function filterCards() {
+            const searchVal = document.getElementById('search-input').value.toLowerCase();
+            const landChecked = document.getElementById('chk-land').checked;
+            const regionChecked = document.getElementById('chk-region').checked;
+            const selectedCities = Array.from(document.querySelectorAll('.city-chk:checked')).map(c => c.value);
+
+            const activeTagsContainer = document.getElementById('active-filters-container');
+            let tagsHtml = '';
+
+            if(!landChecked || !regionChecked) {
+                tagsHtml += `<span class="active-filters-tag">Einschränkung aktiv</span>`;
+            }
+            selectedCities.forEach(c => {
+                tagsHtml += `<span class="active-filters-tag">📍 ${c}</span>`;
+            });
+            if(selectedCities.length === 0) tagsHtml = `<span style="font-size:0.8rem; color:var(--heart-red);">Keine Stadt ausgewählt</span>`;
+            activeTagsContainer.innerHTML = tagsHtml;
+
+            const filtered = inventoryData.filter(item => {
+                const matchesSearch = item.title.toLowerCase().includes(searchVal) || 
+                                      item.publisher.toLowerCase().includes(searchVal) || 
+                                      item.id.toLowerCase().includes(searchVal);
+
+                if(!landChecked) return false;
+                if(!regionChecked) return false;
+                const matchesCity = selectedCities.includes(item.city);
+
+                return matchesSearch && matchesCity;
+            });
+
+            renderGrid(filtered);
+        }
+
+        function resetFilters() {
+            document.getElementById('search-input').value = '';
+            document.getElementById('chk-land').checked = true;
+            document.getElementById('chk-region').checked = true;
+            document.querySelectorAll('.city-chk').forEach(c => c.checked = true);
+            filterCards();
+        }
+
+        function toggleWishlist(id) {
+            const idx = wishlist.indexOf(id);
+            if(idx > -1) {
+                wishlist.splice(idx, 1);
+            } else {
+                wishlist.push(id);
+            }
+            localStorage.setItem('ak_wishlist', JSON.stringify(wishlist));
+            filterCards();
+            renderWishlistPage();
+        }
+
+        function updateWishlistUI() {
+            document.getElementById('wishlist-count').textContent = wishlist.length;
+        }
+
+        function renderWishlistPage() {
+            const grid = document.getElementById('wishlist-grid');
+            if(!grid) return;
+            const items = inventoryData.filter(i => wishlist.includes(i.id));
+            if(items.length === 0) {
+                grid.innerHTML = `<p style="grid-column: 1/-1; text-align:center; padding: 40px; color: var(--text-muted);">Ihre Merkliste ist derzeit leer.</p>`;
+                return;
+            }
+            let html = '';
+            items.forEach(item => {
+                const imgName = getImageSrc(item);
+                html += `
+                <div class="card">
+                    <button class="wishlist-btn active" onclick="toggleWishlist('${item.id}')">♥</button>
+                    <div class="card-id">${item.id}</div>
+                    <div class="card-img-container" onclick="openDetail('${item.id}')">
+                        <img src="${imgName}" alt="${item.title}" onerror="this.onerror=null; this.src='aki und kari 2.png'; this.style.objectFit='contain';">
+                    </div>
+                    <div class="card-title">${item.title}</div>
+                    <div class="card-price">${item.price.toFixed(2).replace('.', ',')} €</div>
+                    <button class="btn" onclick="alert('Artikel ${item.id} aus Merkliste in Warenkorb gelegt!')">In den Warenkorb</button>
+                </div>`;
+            });
+            grid.innerHTML = html;
+        }
+
+        function openDetail(id) {
+            const item = inventoryData.find(i => i.id === id);
+            if(!item) return;
+            const imgName = getImageSrc(item);
+
+            const content = document.getElementById('detail-content');
+            content.innerHTML = `
+                <h2 style="font-family:'Playfair Display',serif; margin-bottom:10px;">${item.title}</h2>
+                <div style="font-size:0.85rem; color:var(--text-muted); margin-bottom:15px;">Artikel-ID: <strong>${item.id}</strong></div>
+                
+                <div class="detail-gallery">
+                    <div class="detail-img-box" title="Vorderseite">
+                        <img src="${imgName}" alt="Vorderseite" onerror="this.onerror=null; this.src='aki und kari 2.png'; this.style.objectFit='contain';">
+                    </div>
+                    <div class="detail-img-box" title="Rückseite / Stempel">
+                        <img src="aki und kari 2.png" alt="Rückseite Platzhalter" style="object-fit:contain;">
+                    </div>
+                </div>
+
+                <div style="margin-bottom:15px;">
+                    <p><strong>Region / Stadt:</strong> ${item.city}, ${item.region}</p>
+                    <p><strong>Verlag:</strong> ${item.publisher}</p>
+                    <p><strong>Zustand:</strong> ${item.condition}</p>
+                    <p style="margin-top:10px;"><strong>Beschreibung:</strong> ${item.desc}</p>
+                </div>
+
+                <div style="display:flex; justify-content:space-between; align-items:center; border-top: 1px solid var(--border-warm); padding-top:15px; margin-top:15px;">
+                    <div style="font-size:1.4rem; font-weight:bold; color:var(--accent-brown);">${item.price.toFixed(2).replace('.', ',')} €</div>
+                    <button class="btn" onclick="alert('Artikel ${item.id} erfolgreich bestellt!'); closeDetailModal();">Jetzt Kaufen</button>
+                </div>
+            `;
+            document.getElementById('detail-modal').style.display = 'flex';
+        }
+
+        function closeDetailModal() { document.getElementById('detail-modal').style.display = 'none'; }
+
+        function handleInquirySubmit(e) {
+            e.preventDefault();
+            document.getElementById('inquiry-form').style.display = 'none';
+            document.getElementById('inquiry-success').style.display = 'block';
+        }
+
+        function openLegal(type) {
+            const modal = document.getElementById('legal-modal');
+            const content = document.getElementById('legal-content');
+            let title = "";
+            let text = "";
+
+            switch(type) {
+                case 'impressum':
+                    title = "Impressum";
+                    text = "<p><strong>Angaben gemäß § 5 TMG:</strong><br>Joachim Bartmann<br>Kümmersbruck<br>Deutschland</p><p><strong>Kontakt:</strong><br>E-Mail: kontakt@ansichtskarten-shop.de</p>";
+                    break;
+                case 'datenschutz':
+                    title = "Datenschutzerklärung";
+                    text = "<p>Wir nehmen den Schutz Ihrer persönlichen Daten ernst. Ihre Daten werden ausschließlich zur Abwicklung Ihrer Bestellungen und Anfragen verwendet.</p>";
+                    break;
+                case 'agb':
+                    title = "Allgemeine Geschäftsbedingungen";
+                    text = "<p>1. Geltungsbereich<br>Für alle Lieferungen gelten unsere AGB.</p><p>2. Preise<br>Alle Preise sind Endpreise. Differenzbesteuert nach § 25a UStG.</p>";
+                    break;
+                case 'widerruf':
+                    title = "Widerrufsbelehrung";
+                    text = "<p>Sie haben das Recht, binnen vierzehn Tagen ohne Angabe von Gründen diesen Vertrag zu widerrufen.</p>";
+                    break;
+                case 'versand':
+                    title = "Versand & Zahlung";
+                    text = "<p>Der Versand erfolgt sicher verpackt per Deutsche Post / DHL. Zahlungsarten: Vorkasse, PayPal.</p>";
+                    break;
+            }
+
+            content.innerHTML = `<h2 style="font-family:'Playfair Display',serif; margin-bottom:15px;">${title}</h2>${text}`;
+            modal.style.display = 'flex';
+        }
+
+        function closeLegalModal() { document.getElementById('legal-modal').style.display = 'none'; }
+
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+            if(document.getElementById('nav-' + pageId)) {
+                document.getElementById('nav-' + pageId).classList.add('active');
+            }
+            window.scrollTo(0, 0);
+            if(pageId === 'merkliste') renderWishlistPage();
+        }
+
+        function openAuthModal() { document.getElementById('auth-modal').style.display = 'flex'; }
+        function closeAuthModal() { document.getElementById('auth-modal').style.display = 'none'; }
+
+        function toggleAuthMode() {
+            isSignUpMode = !isSignUpMode;
+            document.getElementById('auth-title').textContent = isSignUpMode ? "Konto erstellen (+1 Gratis-Scan)" : "Kunden-Anmeldung";
+            document.getElementById('auth-submit-btn').textContent = isSignUpMode ? "Jetzt Registrieren" : "Einloggen";
+            document.getElementById('auth-toggle-link').textContent = isSignUpMode ? "Bereits ein Konto? Hier einloggen" : "Noch kein Konto? Jetzt registrieren (+1 Gratis-Scan!)";
+        }
+
+        async function handleAuthSubmit(e) {
+            e.preventDefault();
+            const email = document.getElementById('auth-email').value;
+            const pass = document.getElementById('auth-pass').value;
+
+            try {
+                if (isSignUpMode) {
+                    await auth.createUserWithEmailAndPassword(email, pass);
+                    alert("Registrierung erfolgreich! 1 Gratis-Scan wurde gutgeschrieben.");
+                } else {
+                    await auth.signInWithEmailAndPassword(email, pass);
+                }
+                closeAuthModal();
+            } catch (err) {
+                alert("Fehler: " + err.message);
+            }
+        }
+
+        function handleFileSelect(files) {
+            if (files.length === 0) return;
+            selectedFile = files[0];
+            const reader = new FileReader();
+            reader.onload = e => {
+                document.getElementById('img-preview').src = e.target.result;
+                document.getElementById('preview-box').style.display = 'block';
+                document.getElementById('transcribe-btn').style.display = 'inline-block';
+            };
+            reader.readAsDataURL(selectedFile);
+        }
+
+        function fileToBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => resolve(reader.result.split(',')[1]);
+                reader.onerror = error => reject(error);
+                reader.readAsDataURL(file);
+            });
+        }
+
+        async function startTranscription() {
+            if (!currentUser) {
+                alert("Bitte loggen Sie sich zuerst ein!");
+                openAuthModal();
+                return;
+            }
+            if (userCredits <= 0) {
+                alert("Ihr Guthaben ist aufgebraucht.");
+                return;
+            }
+
+            const btn = document.getElementById('transcribe-btn');
+            const resultBox = document.getElementById('result-box');
+            const resultText = document.getElementById('result-text');
+
+            btn.disabled = true;
+            btn.textContent = "📜 KI analysiert Handschrift...";
+            resultBox.style.display = 'block';
+            resultText.textContent = "Handschrift wird entziffert...";
+
+            try {
+                const base64Image = await fileToBase64(selectedFile);
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{
+                            parts: [
+                                { text: "Transkribiere den handschriftlichen Text exakt in moderne lateinische Schrift." },
+                                { inline_data: { mime_type: selectedFile.type || "image/jpeg", data: base64Image } }
+                            ]
+                        }]
+                    })
+                });
+
+                const data = await response.json();
+                if (data.candidates && data.candidates[0].content.parts[0].text) {
+                    resultText.textContent = `"${data.candidates[0].content.parts[0].text.trim()}"`;
+                    userCredits--;
+                    await db.collection('users').doc(currentUser.uid).update({ credits: userCredits });
+                    document.getElementById('user-credits').textContent = userCredits;
+                } else {
+                    resultText.textContent = "Handschrift konnte nicht gelesen werden.";
+                }
+            } catch (err) {
+                resultText.textContent = "Fehler bei der Verbindung.";
+            } finally {
+                btn.disabled = false;
+                btn.textContent = "Jetzt übersetzen (1 Scan abziehen)";
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            refreshCatalog();
+            updateWishlistUI();
+        });
+    </script>
+</body>
+</html>

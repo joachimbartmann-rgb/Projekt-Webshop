@@ -1,0 +1,6 @@
+safety_margin: 15
+min_area: 10000
+
+import_dir: C:/_docs/Ansichtskarten/phyton_test/Import
+output_dir: C:/_docs/Ansichtskarten/phyton_test/Output
+archive_dir: C:/_docs/Ansichtskarten/phyton_test/Archive

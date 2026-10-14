@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Aki & Kari Katalog</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+    --bg:#f4efe6;
+    --card:#fffcf7;
+    --dark:#2c1d11;
+    --brown:#7a5230;
+    --border:#d9ccb8;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    background:var(--bg);
+    font-family:'Merriweather',serif;
+    color:#332821;
+}
+
+/* Header-Bereich */
+header{
+    background:#2c1d11;
+    color:white;
+    text-align:center;
+    position:relative;
+}
+
+header h1{
+    padding:20px;
+    font-family:'Playfair Display',serif;
+}
+
+.banner{
+    width:100%;
+    max-height:180px;
+    object-fit:contain;
+    display:block;
+    margin:auto;
+}
+
+.container{
+    max-width:1600px;
+    margin:auto;
+    padding:30px;
+}
+
+/* Katalog-Header / Hero */
+.catalog-header{
+    background:#e9dfcf;
+    border:1px solid var(--border);
+    border-radius:6px;
+    padding:25px;
+    margin-bottom:30px;
+    text-align:center;
+}
+
+.catalog-header img{
+    max-width:500px;
+    width:100%;
+    margin-bottom:15px;
+}
+
+.catalog-header h2{
+    margin-bottom:10px;
+    color:var(--dark);
+}
+
+.catalog-header p{
+    color:#66584d;
+}
+
+.search-box{
+    margin-top:20px;
+}
+
+.search-box input{
+    width:100%;
+    max-width:500px;
+    padding:12px;
+    border:1px solid var(--border);
+    border-radius:4px;
+    font-size:1rem;
+}
+
+/* Grid der Produkte */
+.catalog-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+    gap:22px;
+}
+
+.card{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:5px;
+    overflow:hidden;
+    transition:.2s;
+    padding:4px;
+}
+
+.card:hover{ transform:translateY(-4px); }
+
+.card-image{
+    width:100%;
+    height:260px;
+    object-fit:contain;
+    display:block;
+    background:#f8f4ec;
+}
+
+.card-content{ padding:8px; }
+
+.card-id{ font-size:.75rem; color:#7e705f; margin-bottom:5px; }
+
+.card-title{
+    font-size:.9rem;
+    font-weight:bold;
+    color:var(--dark);
+    line-height:1.4;
+    min-height:85px;
+}
+
+.card-link{ text-decoration:none; }
+
+.card-btn{
+    padding:6px 10px;
+    border:1px solid #7a5230;
+    border-radius:4px;
+    background:#f4efe6;
+    color:#2c1d11;
+    cursor:pointer;
+}
+
+.card button{
+    background:#7a5230;
+    color:white;
+    border:none;
+    border-radius:4px;
+    padding:6px 10px;
+    font-family:'Merriweather',serif;
+    cursor:pointer;
+}
+
+.card button:hover{ background:#5d3c23; }
+
+.result-count{
+    margin-bottom:20px;
+    font-size:.95rem;
+    color:#66584d;
+}
+
+/* Warenkorb-Link oben rechts */
+.header-cart{
+    position:absolute;
+    top:20px;
+    right:25px;
+}
+
+.header-cart-link{
+    background:#7a5230;
+    color:white;
+    text-decoration:none;
+    padding:10px 14px;
+    border-radius:6px;
+    font-weight:bold;
+}
+
+.header-cart-link:hover{ background:#5c3c21; }
+
+/* --- Toast (Aki & Kari Popup) --- */
+.toast{
+    position:fixed;
+    top:20px;
+    right:20px;
+    background:#fffcf7;
+    color:#2c1d11;
+    border:2px solid #d9ccb8;
+    border-left:6px solid #7a5230;
+    padding:15px 20px;
+    border-radius:8px;
+    box-shadow:0 5px 15px rgba(0,0,0,.2);
+    font-family:'Merriweather',serif;
+    max-width:400px;
+    z-index:9999;
+
+    opacity:0;
+    transform:translateY(-20px);
+    transition:all .3s ease;
+}
+
+.toast.show{
+    opacity:1;
+    transform:translateY(0);
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>Historische Ansichtskarten &amp; Sammlerstücke</h1>
+
+    <!-- Aki & Kari Banner (im static-Verzeichnis ablegen) -->
+    <img
+        src="{{ url_for('static', filename='aki-und-kari_banner.png') }}"
+        class="banner"
+        alt="Aki und Kari Banner">
+
+    <div class="header-cart">
+        <a href="/warenkorb" class="header-cart-link">
+            🛒 <span id="cartCount">0</span>
+        </a>
+    </div>
+</header>
+
+<div class="container">
+
+    <div class="catalog-header">
+        <img
+            src="{{ url_for('static', filename='katalog_aki_kari.jpg') }}"
+            alt="Aki und Kari Katalog">
+
+        <h2>Postkarten-Katalog</h2>
+
+        <p>
+            Derzeit {{ products|length }} digitalisierte Ansichtskarten
+            im Archiv.
+        </p>
+
+        <div class="search-box">
+            <input
+                type="text"
+                placeholder="Suche folgt im nächsten Schritt">
+        </div>
+    </div>
+
+    <div class="result-count">
+        {{ products|length }} Artikel gefunden
+    </div>
+
+    <div class="catalog-grid">
+        {% for product in products %}
+        <div class="card">
+            <img
+                id="img-{{ product[0] }}"
+                class="card-image"
+                src="/bild/{{ product[0] }}"
+                data-side="front">
+
+            <div class="card-content">
+                <div class="card-id">{{ product[0] }}</div>
+                <div class="card-title">{{ product[1] }}</div>
+
+                <div style="display:flex;gap:6px;margin-top:10px;">
+                    <button
+                        id="btn-{{ product[0] }}"
+                        type="button"
+                        onclick="toggleBack('{{ product[0] }}')">
+                        Rückseite
+                    </button>
+
+                    <a href="/produkt/{{ product[0] }}">
+                        <button type="button">Details</button>
+                    </a>
+
+                    <button
+                       type="button"
+                       onclick="addToCart(
+                        '{{ product[0] }}',
+                        '{{ product[1] }}'
+                    )">
+                        🛒
+                    </button>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+</div>
+
+<script>
+/* ======================================================
+   Front/Back Toggle für Karten
+   ====================================================== */
+function toggleBack(id){
+    const img = document.getElementById("img-" + id);
+    const btn = document.getElementById("btn-" + id);
+    if(!img) return;
+
+    // Vorderseite -> Rückseite
+    if(img.dataset.side === "front"){
+        img.src = "/bild_rueckseite/" + id;
+        img.dataset.side = "back";
+        btn.textContent = "Vorderseite";
+    }
+    // Rückseite -> Vorderseite
+    else{
+        img.src = "/bild/" + id;
+        img.dataset.side = "front";
+        btn.textContent = "Rückseite";
+    }
+}
+
+/* ======================================================
+   Einfacher HTML-Escape für sichere Texte (Basis)
+   Verwendet bevor Inhalte in innerHTML gesetzt werden.
+   ====================================================== */
+function escapeHtml(str){
+    return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+/* ======================================================
+   Toast-Popup (oben rechts)
+   showToast(message) zeigt das Popup kurz an.
+   message kann HTML enthalten (wir escapen vorher).
+   ====================================================== */
+function showToast(messageHtml){
+    const toast = document.getElementById("toast");
+    if(!toast) return;
+
+    // Inhalt setzen (bereits escaped, kann <b> enthalten wenn gewünscht)
+    toast.innerHTML = messageHtml;
+    toast.classList.add("show");
+
+    // Vorherigen Timer zurücksetzen, falls mehrfach aufgerufen
+    if(toast._hideTimeout) clearTimeout(toast._hideTimeout);
+
+    toast._hideTimeout = setTimeout(() => {
+        toast.classList.remove("show");
+        toast._hideTimeout = null;
+    }, 3000);
+}
+
+/* ======================================================
+   Artikel zum Warenkorb hinzufügen (localStorage)
+   - Duplikate werden verhindert
+   - Zähler wird aktualisiert
+   - Toast anstelle von alert wird angezeigt
+   ====================================================== */
+function addToCart(id, title){
+    let cart = JSON.parse(localStorage.getItem("ak_cart")) || [];
+
+    // Prüfen auf vorhandenes Item
+    if(!cart.some(item => item.id === id)){
+        cart.push({ id: id, title: title });
+        localStorage.setItem("ak_cart", JSON.stringify(cart));
+        updateCartCount();
+
+        // Toast-Nachricht (ID und Titel escapen)
+        const msg = "📮 Aki und Kari haben die Ansichtskarte <b>" +
+            escapeHtml(id) +
+            "</b> (" + escapeHtml(title) + ") sicher im Warenkorb abgelegt.";
+        showToast(msg);
+    }else{
+        // Toast für bereits vorhandenes Item
+        const msg = "ℹ️ Artikel <b>" + escapeHtml(id) + "</b> befindet sich bereits im Warenkorb.";
+        showToast(msg);
+    }
+}
+
+/* ======================================================
+   Warenkorb-Zähler aktualisieren (Anzeige oben rechts)
+   ====================================================== */
+function updateCartCount(){
+    let cart = JSON.parse(localStorage.getItem("ak_cart")) || [];
+    const counter = document.getElementById("cartCount");
+    if(counter) counter.textContent = cart.length;
+}
+
+/* ======================================================
+   Hilfsfunktion: Alles aus dem Warenkorb löschen (für Tests)
+   ====================================================== */
+function clearCart(){
+    localStorage.removeItem("ak_cart");
+    updateCartCount();
+}
+
+/* ======================================================
+   Initialisierung beim Laden der Seite
+   ====================================================== */
+document.addEventListener("DOMContentLoaded", function(){
+    updateCartCount();
+});
+</script>
+
+<!-- Toast-Container: sichtbar wenn .show gesetzt wird -->
+<div id="toast" class="toast" aria-live="polite" aria-atomic="true"></div>
+
+</body>
+</html>
